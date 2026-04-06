@@ -60,18 +60,22 @@ If `bevor init` fails (no Solidity files found, auth error, network error) — s
 Run the following to get every auditable entrypoint for this code version:
 
 ```
-bevor entrypoints list --json
+bevor entrypoints list --version-id {version_id} --json
 ```
 
-This returns a JSON array of entrypoint objects. Each object includes a `node_id` field and a `label` in the form `Contract.function` (e.g. `Vault.deposit`, `ERC20.transfer`). Store the full list as `{entrypoints}`, keyed by `node_id`.
+This returns a JSON array of entrypoint objects. Each object has the shape:
+```json
+{ "id": "<entrypoint_id>", "name": "<function>", "contract": "<Contract>", "file": "<path>", "file_id": "<file_id>" }
+```
+Store the full list as `{entrypoints}`, keyed by `id`. Use `contract` + `name` as the human-readable label (e.g. `Vault.deposit`).
 
 Then fetch the call chain for **every** entrypoint in parallel, writing each to its own dedicated file:
 
 ```
 # Run all of these concurrently (& ... wait)
-bevor callchain --entrypoint {node_id_for_Vault.deposit} > {bundle_dir}/Vault.deposit.md
-bevor callchain --entrypoint {node_id_for_ERC20.transfer} > {bundle_dir}/ERC20.transfer.md
-# ... one command per entrypoint, using the node_id from the JSON output
+bevor callchain --entrypoint {id_for_Vault.deposit} --version-id {version_id} > {bundle_dir}/Vault.deposit.md
+bevor callchain --entrypoint {id_for_ERC20.transfer} --version-id {version_id} > {bundle_dir}/ERC20.transfer.md
+# ... one command per entrypoint, using the id from the JSON output
 ```
 
 Each output file contains:
@@ -149,29 +153,30 @@ Print line counts for every bundle. Do NOT inline file content into agent prompt
 
 ## Turn 5 — Spawn Agents
 
-In one message, spawn all 7 agents as parallel foreground Agent calls. Prompt template (substitute real values):
+In one message, spawn all 7 agents as parallel foreground Agent calls. Use this prompt for every agent (substitute real values for `{bundle_dir}`, `{N}`, `{M}`, and `{version_id}`):
 
 ```
-Your bundle file is {bundle_dir}/agent-N-bundle.md (XXXX lines).
-The bundle contains the source and call chains for the {M} entrypoints assigned to your specialty,
-followed by your agent instructions.
+Your bundle file is {bundle_dir}/agent-N-bundle.md ({N} lines).
+Read it fully before producing findings. The bundle contains {M} entrypoints followed by your agent instructions.
 
-Read the bundle fully before producing findings.
+Bundle format — each entrypoint is a section with:
+- `### path :: Contract.function` header
+- Fenced solidity block (the function source)
+- `**Call chain:**` — pre-traced graph with `calls`, `reads`, `writes`, `emits`, `throws` annotations
+- `Static Analysis:` — fully-qualified signatures of every function in the chain
 
-Source format: each entrypoint is a separate section beginning with `### Contract.function` and containing:
-- The function source in a fenced solidity block
-- A `**Call chain:**` section: pre-traced graph with `calls`, `reads`, `writes`, `emits`, and `throws` annotations
-- Static analysis signatures
+THE CALL CHAIN IS YOUR PRIMARY ANALYSIS SURFACE. Source code is secondary confirmation only.
+Do not re-trace what the chain already annotates. Use the graph nodes directly:
+- `writes <var>` → the storage slot mutated and when in the execution order
+- `throws <Error>` → a guard exists at that position in the chain
+- `calls <fn>` / `calls external` → a callee exists; the indentation gives you ordering
+- `reads <var>` → the value consumed at that point
 
-How to use the call chain for your specialty:
-- Authorization surface: every `throws` and authorization node in the chain is a guard. A missing guard node on a state-changing function is an immediate finding candidate.
-- State mutation map: `writes <var>` annotations show exactly which storage slots each function touches.
-- Entry-to-impact path: the call chain IS the execution trace. Walk it forward for value flow and backward from `writes`/`emits` to find unguarded entry points.
+Your chain protocol and agent instructions are at the end of your bundle.
 
-**Dynamic entrypoint access:** If your analysis requires the call chain for an entrypoint not in your bundle,
-run:
-  bevor callchain --entrypoint <node_id>
-Use this only when a cross-contract dependency or inherited function cannot be inferred from the existing chains.
+**Dynamic entrypoint access:** If your analysis requires a call chain not in your bundle, run:
+  bevor callchain --entrypoint <id> --version-id {version_id}
+Use only when a cross-contract dependency cannot be inferred from existing chains.
 ```
 
 ---
