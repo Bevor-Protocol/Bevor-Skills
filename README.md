@@ -24,10 +24,8 @@ review for security
 
 ## Requirements
 
-The `solidity-audit` skill requires the [Bevor Graph SDK](https://bevor.io/) and the following environment variables:
+- **`bevor` CLI** installed and authenticated ([Bevor](https://bevor.io/)). The skill flow uses `bevor codes push`, `bevor analyses create`, `bevor analyses scopes set`, `bevor graph …`, and related commands — see [solidity-audit/Skill.md](solidity-audit/Skill.md).
+- A **`.bevor`** project config in the target repo (from `bevor init`).
+- Optional env overrides if your CLI uses them (e.g. API base URL); see `bevor` docs for your version.
 
-| Variable | Purpose |
-|---|---|
-| `BEVOR_API_KEY` | API key for `GraphClient` authentication |
-| `BEVOR_VERSION_ID` | Code version UUID already ingested by Bevor |
-| `BEVOR_BASE_URL` | Override API origin (default `https://api.bevor.io`) |
+The skill materializes under **`.bevor/analyses/{analysis_id}/`** (per-scope `*.raw.md` / `*.findings.md`) and may write **`.bevor/bevor-audit-report.md`**. Add `.bevor/analyses/` and/or those filenames to `.gitignore` in target repos if you do not want them committed.

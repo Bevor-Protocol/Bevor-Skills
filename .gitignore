@@ -1,3 +1,7 @@
+# Generated when running the solidity-audit skill in-repo
+.bevor/analyses/
+.bevor/bevor-audit-report.md
+
 *.DS_Store
 .claude/
 **/evals/results/

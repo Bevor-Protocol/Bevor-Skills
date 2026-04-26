@@ -1,6 +1,6 @@
 # hacking-agents
 
-Per-agent instruction files. Each file is appended to a source bundle and defines the specialty, analysis methodology, and output format for one parallel audit agent.
+Per-agent instruction files. Each file is **one** of several possible parallel roles — the main **`Skill.md`** tells the orchestrator not to run all seven on every run (context and rate limits). Each file is concatenated with assigned **`.raw.md`** bundles and **`shared-rules.md`**.
 
 ## Agents
 

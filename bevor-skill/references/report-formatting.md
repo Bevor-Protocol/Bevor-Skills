@@ -1,5 +1,7 @@
 # Report Formatting
 
+List **Files reviewed** from Bevor **scopes** / **graph** coverage (node paths, scope ids), not from an ad-hoc directory walk. Findings in the report must still trace back to the graph-backed audit, not a parallel raw-code pass.
+
 ## Report Path
 
 Save the report to `assets/findings/{project-name}-pashov-ai-audit-report-{timestamp}.md` where `{project-name}` is the repo root basename and `{timestamp}` is `YYYYMMDD-HHMMSS` at scan time.
