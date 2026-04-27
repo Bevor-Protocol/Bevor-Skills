@@ -1,6 +1,6 @@
 ---
 name: bevor-skill
-description: Security audit via the Bevor graph only (no raw working-tree code review). Trigger on "audit", "check this contract", "review for security". Uses `bevor analyses scopes materialize` for per-scope `*.raw.md`, then `bevor graph *` in agents, and `*.findings.md` under `.bevor/analyses/{analysis_id}/`.
+description: Security analysis via the Bevor graph only (no raw working-tree code review). Trigger on "audit", "analyze", "check this contract", "review for security". Uses `bevor analyses scopes materialize` for per-scope `*.raw.md`, then `bevor graph *` in agents, and `*.findings.md` under `.bevor/analyses/{analysis_id}/`.
 ---
 
 # Smart Contract Security Audit (Bevor CLI)
@@ -21,7 +21,7 @@ You orchestrate a parallelized smart contract security audit using the **`bevor`
 bevor analyses scopes materialize
 ```
 
-(Use **`-a <analysis_id>`** if the active analysis in `.bevor` is not the one you want.) This writes every scope in one go; do not run per-scope `bevor graph` yourself for **Part C**, and do not copy CLI output into context then paste with the **Write** tool.
+This writes every scope in one go; do not run per-scope `bevor graph` yourself for **Part C**, and do not copy CLI output into context then paste with the **Write** tool.
 
 For **findings** and any **extra** graph exploration in **Part D**, still **append to disk** with `>>` (or the CLI’s file flags) when you are not using a dedicated subcommand that writes the file for you. Never hold large graph output in chat only to re-emit it.
 
