@@ -9,8 +9,8 @@ A library of Claude AI skills. Each skill is a focused, self-contained capabilit
 ## Structure
 
 ```
-bevor-skill/ # Security review of Solidity changes while you develop
-CLAUDE.md            # This file (read by Claude Code)
+bevor-skill/           # Security review; entry: SKILL.md, phases: setup.md, analysis.md, findings.md
+CLAUDE.md              # This file (read by Claude Code)
 ```
 
 ## Rules

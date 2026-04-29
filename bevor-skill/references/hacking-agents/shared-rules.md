@@ -2,11 +2,11 @@
 
 ## What you are given
 
-Each assignment is one or more files under **`.bevor/analyses/{analysis_id}/`** named **`{short_id}.raw.md`**, produced by **`bevor analyses scopes materialize`**. Real layout:
+Each assignment is one or more files under **`.bevor/analyses/{analysis_id}/`** named **`{short_id}.raw.md`**, produced by **`bevor agent materialize`**. Real layout:
 
 1. **Source** — graph-sourced snippet for that scope node (plain text at the top).
 2. A blank line, then the line **`call-chain:`**
-3. A **text call tree** (same shape as interactive **`bevor graph call-chain <short_id>`** without JSON): root line, then `├──` / `└──` lines, with **short ids** in brackets. This is your pre-traced slice; start from it.
+3. A **text call tree** (same shape as **`bevor codes nodes call-chain`** human-tree output, not JSON): root line, then `├──` / `└──` lines, with **short ids** in brackets. This is your pre-traced slice; start from it.
 
 There is **no** `### path :: Contract.function` header, no fenced Solidity blocks, no separate “Static Analysis” section unless your prompt added it.
 
@@ -14,19 +14,21 @@ There is **no** `### path :: Contract.function` header, no fenced Solidity block
 
 If you need another function’s source, callees, or structure **not** fully covered in the bundle:
 
-1. **`bevor graph edges <short_id> -j`** — discover neighbor nodes (use `--direction in` or `out` as needed). Read `short_src_id` / `short_dst_id` (or equivalent) from JSON.
-2. **`bevor graph content <short_id>`** — source for that node only.
-3. **`bevor graph call-chain <short_id>`** or **`bevor graph call-chain formatted <short_id>`** — refresh or get JSON vs tree for a specific node you are investigating.
+1. **`bevor codes nodes edges <short_id> -j`** — discover neighbor nodes (use `--direction in` or `out` as needed). Read `short_src_id` / `short_dst_id` (or equivalent) from JSON.
+2. **`bevor codes nodes content <short_id>`** — source for that node only.
+3. **`bevor codes nodes call-chain <short_id>`** — JSON or formatted tree per flags; refresh a chain for a specific node you are investigating (follow CLI rules — do not combine incompatible flags).
 
-**That is the only way** to read additional Solidity. Do **not** open project paths such as `contracts/`, `src/`, `lib/`, `foundry.toml`, or **`*.sol` files via the repo filesystem**. Do not `grep` / `ripgrep` the tree for “all `.sol`” or walk directories for source. If it is not reachable through **`bevor graph`** from ids in the bundle or from **edges** expansion, it is out of scope for you.
+**That is the only way** to read additional Solidity. Do **not** open project source files from the working tree (e.g. by path glob or ripgrep over the whole repo). If it is not reachable through **`bevor codes nodes`** from ids in the bundle or from **edges** expansion, it is out of scope for you.
 
-`short_id` is always the **short** id (e.g. `AAAB`), never the long UUID, in all `bevor graph` arguments.
+`short_id` is always the **short** id (e.g. `AAAB`), never the long UUID, in all `bevor codes nodes` arguments.
+
+Use **`bevor codes nodes get <short_id>`** when you need node metadata not present in **edges** / **content**.
 
 ## Economy
 
-- Do not re-fetch **`bevor graph content`** for a node whose source is **already in your `.raw.md`** unless you are verifying after a code-version change.
+- Do not re-fetch **`bevor codes nodes content`** for a node whose source is **already in your `.raw.md`** unless you are verifying after a code-version change.
 - Expand with **edges** in small steps; do not fan out to “every node in the project.”
-- Every substantive claim about behavior must be traceable to a **node short_id** and either the bundle or a **`bevor graph`** result.
+- Every substantive claim about behavior must be traceable to a **node short_id** and either the bundle or a **`bevor codes nodes`** result.
 
 ## Do not report
 
@@ -38,7 +40,7 @@ Return structured blocks only — no preamble, no narration, unless a specialty 
 
 FINDINGs need concrete, exploitable paths. LEADs: real code smells, partial path — default LEAD over dropping.
 
-**Every FINDING should have a `proof:`** — trace or values grounded in the graph-sourced view (bundle + `bevor graph` as above). No proof → LEAD.
+**Every FINDING should have a `proof:`** — trace or values grounded in the graph-sourced view (bundle + `bevor codes nodes` as above). No proof → LEAD.
 
 **One vulnerability per item.** Same root cause → one item.
 

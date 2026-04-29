@@ -1,6 +1,6 @@
 # hacking-agents
 
-Per-agent instruction files. Each file is **one** of several possible parallel roles — the main **`Skill.md`** tells the orchestrator not to run all seven on every run (context and rate limits). Each file is concatenated with assigned **`.raw.md`** bundles and **`shared-rules.md`**.
+Per-agent instruction files. Each file is **one** of several possible parallel roles — the main skill entry (`SKILL.md`) caps parallelism by default (context and rate limits). Each file is concatenated with assigned **`.raw.md`** bundles and **`shared-rules.md`**.
 
 ## Agents
 
