@@ -1,5 +1,24 @@
 # Shared rules (Bevor graph audit)
 
+## ABSOLUTELY FORBIDDEN — no exceptions
+
+For the **repository under audit** (not **`.bevor/`**, not this **skill package**):
+
+- **`Read`**, **`cat`**, **`ls`**, **`grep`**, **`find`**, or globbing to load **`.sol`**, **`.ts`**, **`.js`**, **`.json`**, or other **implementation files**
+- Any tool access to **audited project source paths** outside **`./.bevor/`** when the goal is reading code for this audit
+
+**You may read:** **`./.bevor/`** (bundles, findings, analyses) and files under **this skill** (e.g. **`references/`** instructions) only.
+
+**Solidity for a node — only:**
+
+```text
+bevor codes nodes content <short_id>
+```
+
+Violations invalidate the run. If you open an audit-repo source path, **stop**; use the graph CLI.
+
+---
+
 ## What you are given
 
 Each assignment is one or more files under **`.bevor/analyses/{analysis_id}/`** named **`{short_id}.raw.md`**, produced by **`bevor agent materialize`**. Real layout:
@@ -18,7 +37,7 @@ If you need another function’s source, callees, or structure **not** fully cov
 2. **`bevor codes nodes content <short_id>`** — source for that node only.
 3. **`bevor codes nodes call-chain <short_id>`** — JSON or formatted tree per flags; refresh a chain for a specific node you are investigating (follow CLI rules — do not combine incompatible flags).
 
-**That is the only way** to read additional Solidity. Do **not** open project source files from the working tree (e.g. by path glob or ripgrep over the whole repo). If it is not reachable through **`bevor codes nodes`** from ids in the bundle or from **edges** expansion, it is out of scope for you.
+**That is the only way** to read additional Solidity from the audited codebase. If it is not reachable through **`bevor codes nodes`** from ids in the bundle or from **edges** expansion, it is out of scope for you.
 
 `short_id` is always the **short** id (e.g. `AAAB`), never the long UUID, in all `bevor codes nodes` arguments.
 

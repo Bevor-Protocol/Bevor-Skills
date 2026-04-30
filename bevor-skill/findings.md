@@ -14,6 +14,8 @@ There are **two stages**: **per-scope intermediate** files (may hold **many** fi
 
 **Voice:** report from **source**—no tooling or graph talk in **`name`** or **`description`**. **`location_id`** and **`scope_ids`** are the **only** places for graph **`short_id`**s—never hide ids in **`description`**.
 
+**Scope fit:** In **`{scope_key}.findings.md`**, list only issues **in play for that scope**: **`location_id`**, behavior, and **`description`** should tie to nodes on this scope’s bundle (entry + call chain) or to code/state **clearly implicated** by that path (e.g. storage this path reads/writes, callees it invokes). Do not file **withdraw**-only flaws under a **deposit** scope (or unrelated entrypoints) unless **`description`** states the **causal bridge** (shared account state, broken invariant linking both, reentrancy through this entry, etc.). Otherwise put the finding on the owning scope or omit. Dedup across scopes still merges **`scope_ids`** when the same bug legitimately spans keys.
+
 ## Per-scope intermediate
 
 **Path:** **`.bevor/analyses/{analysis_id}/{scope_key}.findings.md`** (same **`{scope_key}`** as **`{scope_key}.raw.md`**).

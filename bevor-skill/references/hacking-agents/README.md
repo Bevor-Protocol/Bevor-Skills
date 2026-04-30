@@ -1,6 +1,6 @@
 # hacking-agents
 
-Per-agent instruction files. Each file is **one** of several possible parallel roles — the main skill entry (`SKILL.md`) caps parallelism by default (context and rate limits). Each file is concatenated with assigned **`.raw.md`** bundles and **`shared-rules.md`**.
+Per-agent instruction files. Each file is **one** of several possible parallel roles — the main skill entry (`SKILL.md`) caps parallelism by default (context and rate limits). Each file is concatenated with assigned **`.raw.md`** bundles.
 
 ## Agents
 
@@ -13,4 +13,3 @@ Per-agent instruction files. Each file is **one** of several possible parallel r
 | `invariant-agent.md` | Agent 5 | State integrity, accounting invariants, storage slot consistency |
 | `periphery-agent.md` | Agent 6 | External protocol integrations, oracle dependencies, router interfaces, off-chain inputs |
 | `first-principles-agent.md` | Agent 7 | Catch-all; receives the full entrypoint set to catch novel or cross-cutting bugs |
-| `shared-rules.md` | All | Common rules appended to every agent bundle regardless of specialty |
