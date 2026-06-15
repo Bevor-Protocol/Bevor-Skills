@@ -12,7 +12,7 @@ For the **repository under audit** (not **`.bevor/`**, not this **skill package*
 **Solidity for a node — only:**
 
 ```text
-bevor codes nodes content <short_id>
+bevor nodes content <short_id>
 ```
 
 Violations invalidate the run. If you open an audit-repo source path, **stop**; use the graph CLI.
@@ -25,7 +25,7 @@ Each assignment is one or more files under **`.bevor/analyses/{analysis_id}/`** 
 
 1. **Source** — graph-sourced snippet for that scope node (plain text at the top).
 2. A blank line, then the line **`call-chain:`**
-3. A **text call tree** (same shape as **`bevor codes nodes call-chain`** human-tree output, not JSON): root line, then `├──` / `└──` lines, with **short ids** in brackets. This is your pre-traced slice; start from it.
+3. A **text call tree** (same shape as **`bevor nodes call-chain`** human-tree output, not JSON): root line, then `├──` / `└──` lines, with **short ids** in brackets. This is your pre-traced slice; start from it.
 
 There is **no** `### path :: Contract.function` header, no fenced Solidity blocks, no separate “Static Analysis” section unless your prompt added it.
 
@@ -33,21 +33,21 @@ There is **no** `### path :: Contract.function` header, no fenced Solidity block
 
 If you need another function’s source, callees, or structure **not** fully covered in the bundle:
 
-1. **`bevor codes nodes edges <short_id> -j`** — discover neighbor nodes (use `--direction in` or `out` as needed). Read `short_src_id` / `short_dst_id` (or equivalent) from JSON.
-2. **`bevor codes nodes content <short_id>`** — source for that node only.
-3. **`bevor codes nodes call-chain <short_id>`** — JSON or formatted tree per flags; refresh a chain for a specific node you are investigating (follow CLI rules — do not combine incompatible flags).
+1. **`bevor nodes edges <short_id> -j`** — discover neighbor nodes (use `--direction in` or `out` as needed). Read `short_src_id` / `short_dst_id` (or equivalent) from JSON.
+2. **`bevor nodes content <short_id>`** — source for that node only.
+3. **`bevor nodes call-chain <short_id>`** — JSON or formatted tree per flags; refresh a chain for a specific node you are investigating (follow CLI rules — do not combine incompatible flags).
 
-**That is the only way** to read additional Solidity from the audited codebase. If it is not reachable through **`bevor codes nodes`** from ids in the bundle or from **edges** expansion, it is out of scope for you.
+**That is the only way** to read additional Solidity from the audited codebase. If it is not reachable through **`bevor nodes`** from ids in the bundle or from **edges** expansion, it is out of scope for you.
 
-`short_id` is always the **short** id (e.g. `AAAB`), never the long UUID, in all `bevor codes nodes` arguments.
+`short_id` is always the **short** id (e.g. `AAAB`), never the long UUID, in all `bevor nodes` arguments.
 
-Use **`bevor codes nodes get <short_id>`** when you need node metadata not present in **edges** / **content**.
+Use **`bevor nodes get <short_id>`** when you need node metadata not present in **edges** / **content**.
 
 ## Economy
 
-- Do not re-fetch **`bevor codes nodes content`** for a node whose source is **already in your `.raw.md`** unless you are verifying after a code-version change.
+- Do not re-fetch **`bevor nodes content`** for a node whose source is **already in your `.raw.md`** unless you are verifying after a code-version change.
 - Expand with **edges** in small steps; do not fan out to “every node in the project.”
-- Every substantive claim about behavior must be traceable to a **node short_id** and either the bundle or a **`bevor codes nodes`** result.
+- Every substantive claim about behavior must be traceable to a **node short_id** and either the bundle or a **`bevor nodes`** result.
 
 ## Do not report
 
@@ -59,7 +59,7 @@ Return structured blocks only — no preamble, no narration, unless a specialty 
 
 FINDINGs need concrete, exploitable paths. LEADs: real code smells, partial path — default LEAD over dropping.
 
-**Every FINDING should have a `proof:`** — trace or values grounded in the graph-sourced view (bundle + `bevor codes nodes` as above). No proof → LEAD.
+**Every FINDING should have a `proof:`** — trace or values grounded in the graph-sourced view (bundle + `bevor nodes` as above). No proof → LEAD.
 
 **One vulnerability per item.** Same root cause → one item.
 
