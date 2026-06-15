@@ -1,0 +1,4 @@
+interface:
+  display_name: "Operate Bevor"
+  short_description: "Manage Bevor lifecycle and finding transport"
+  default_prompt: "Use $operate-bevor to synchronize this codebase and manage its Bevor analysis."

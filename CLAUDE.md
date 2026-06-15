@@ -9,12 +9,15 @@ A library of Claude AI skills. Each skill is a focused, self-contained capabilit
 ## Structure
 
 ```
-bevor-skill/           # Security review; entry: SKILL.md, phases: setup.md, analysis.md, findings.md
-CLAUDE.md              # This file (read by Claude Code)
+analyze-codebase/      # Security reasoning and intermediate finding production
+operate-bevor/         # Bevor CLI lifecycle, synchronization, and findings transport
 ```
 
 ## Rules
 
 - One skill, one purpose.
+- Keep state-changing Bevor operations out of `analyze-codebase`.
+- Keep vulnerability discovery and assessment out of `operate-bevor`.
+- Regenerate `operate-bevor/references/cli-surface.md` from the CLI instead of editing it manually.
 - No fabricated examples - outputs must reflect real model responses.
 - No secrets, API keys, or personal data.

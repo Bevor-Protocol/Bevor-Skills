@@ -1,0 +1,4 @@
+interface:
+  display_name: "Analyze Codebase"
+  short_description: "Find and validate code security vulnerabilities"
+  default_prompt: "Use $analyze-codebase to audit this codebase and produce structured findings."
