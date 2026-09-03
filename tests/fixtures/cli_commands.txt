@@ -1,0 +1,56 @@
+# bevor-cli 0.1.0 command snapshot, source commit 591421f2963f6095d33521ff57ca3d60759333e3
+bevor help
+bevor login
+bevor logout
+bevor whoami
+bevor init
+bevor context
+bevor sessions list
+bevor sessions revoke
+bevor team select
+bevor team list
+bevor project select
+bevor project list
+bevor project create
+bevor project get
+bevor code use
+bevor code list
+bevor code get
+bevor code push
+bevor code sync
+bevor code node list
+bevor code node get
+bevor code node content
+bevor code node edges
+bevor code node call-chain
+bevor code node interactive
+bevor analysis create
+bevor analysis use
+bevor analysis set
+bevor analysis get
+bevor analysis run
+bevor analysis retry
+bevor analysis diff
+bevor analysis commit
+bevor analysis child
+bevor analysis fork
+bevor analysis merge
+bevor analysis entrypoints
+bevor analysis remediations
+bevor analysis delete full
+bevor analysis delete version
+bevor finding list
+bevor finding get
+bevor finding add
+bevor finding edit
+bevor finding delete
+bevor finding revert
+bevor finding acknowledge
+bevor agent setup
+bevor agent materialize
+bevor agent submit
+bevor chat list
+bevor chat get
+bevor chat messages
+bevor chat new
+bevor chat resume

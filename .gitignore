@@ -6,3 +6,5 @@
 .claude/
 **/evals/results/
 .env
+__pycache__/
+*.py[cod]

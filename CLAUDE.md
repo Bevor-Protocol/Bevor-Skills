@@ -1,20 +1,26 @@
 # CLAUDE.md
 
-Instructions for Claude when contributing to this repository.
+Instructions for contributing to this repository.
 
-## What This Repo Is
+## What this repository contains
 
-A library of Claude AI skills. Each skill is a focused, self-contained capability for Claude Code in VS Code and Cursor.
+This repository publishes the broad Bevor Agent Skill.
 
-## Structure
-
-```
-bevor-skill/           # Security review; entry: SKILL.md, phases: setup.md, analysis.md, findings.md
-CLAUDE.md              # This file (read by Claude Code)
+```text
+skills/bevor/          # Entry: SKILL.md; focused guidance under references/
+tests/                 # Selection and behavior fixtures plus static tests
+BEVOR_SKILL_PRD.md     # Product requirements and source decisions
 ```
 
 ## Rules
 
-- One skill, one purpose.
-- No fabricated examples - outputs must reflect real model responses.
-- No secrets, API keys, or personal data.
+- Keep automatic selection broad for compatible cybersecurity targets.
+- Keep non-security graph selection limited to released native DSL domains.
+- Put shared routing and safety rules in `SKILL.md`.
+- Put detailed mode guidance in focused references.
+- Use released CLI, SDK, API, and application source for exact behavior.
+- Give each generated reference a version or review date.
+- Do not fabricate commands, endpoints, product support, savings, or examples.
+- Do not include secrets, API keys, personal data, or blanket remote approval.
+- Preserve staged review before finding commits.
+- Run the skill tests and CLI contract check after relevant changes.

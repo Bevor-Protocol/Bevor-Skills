@@ -1,0 +1,62 @@
+[
+  {
+    "name": "exact context before scan",
+    "request": "Run a new security agent on this linked Solidity repository.",
+    "must": ["read context", "resolve fingerprint", "get existing findings", "small security brief"],
+    "must_not": ["upload without approval", "apply stale findings as exact"]
+  },
+  {
+    "name": "graph impact",
+    "request": "Find the blast radius of this changed state write.",
+    "must": ["query graph", "follow readers and writers", "include transitive security relations", "confirm source"],
+    "must_not": ["use grep as the only impact method", "treat reachability as vulnerability"]
+  },
+  {
+    "name": "SARIF submission",
+    "request": "Import this scanner SARIF.",
+    "must": ["validate source", "deduplicate", "stage once", "show staged diff", "ask before commit"],
+    "must_not": ["semantic duplicates", "automatic commit without policy"]
+  },
+  {
+    "name": "existing CI job",
+    "request": "Connect the existing Slither workflow to Bevor.",
+    "must": ["preserve existing tool", "prefer SARIF import", "record exact commit", "capture before gate"],
+    "must_not": ["replace with Bevor analysis", "expose fork secrets"]
+  },
+  {
+    "name": "CI retry",
+    "request": "Retry the failed import job.",
+    "must": ["inspect prior result", "reuse repeat key", "reuse code version"],
+    "must_not": ["duplicate run", "duplicate findings"]
+  },
+  {
+    "name": "Slither first",
+    "request": "Order the security tools for this Solidity PR.",
+    "must": ["run pinned Slither first", "record SARIF", "dedup anchor", "give known findings to later tools"],
+    "must_not": ["rank raw finding count", "claim a clean Slither run proves safety"]
+  },
+  {
+    "name": "Python integration",
+    "request": "Build a repeated graph traversal service in Python.",
+    "must": ["use bevor-sdk", "reuse client", "choose sync or async host model", "typed resources"],
+    "must_not": ["old preview SDK", "improvised async event loop"]
+  },
+  {
+    "name": "non-Python integration",
+    "request": "Generate a TypeScript client for Bevor.",
+    "must": ["use OpenAPI", "compare deployed contract", "safe bearer authentication"],
+    "must_not": ["invent endpoint", "put key in client code"]
+  },
+  {
+    "name": "acknowledgement",
+    "request": "Acknowledge this finding.",
+    "must": ["read current state", "state resulting value", "get approval"],
+    "must_not": ["assume toggle sets true"]
+  },
+  {
+    "name": "savings",
+    "request": "Tell me how much Bevor saved.",
+    "must": ["state source of values", "report scope reuse when only scope is known"],
+    "must_not": ["invent tokens", "invent time", "invent price"]
+  }
+]
