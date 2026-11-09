@@ -17,6 +17,8 @@ The skill starts automatically for compatible cybersecurity targets, even when a
 
 ## Installation
 
+This skill requires the Bevor CLI and an authenticated account before any task work. The skill installs a missing CLI and starts browser login when needed. It continues only after `bevor whoami --json` succeeds and identifies the authenticated user. See [CLI installation and authentication](skills/bevor/SKILL.md#cli-installation-and-authentication).
+
 With a compatible skills CLI:
 
 ```bash

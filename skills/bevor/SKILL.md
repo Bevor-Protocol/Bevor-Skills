@@ -11,7 +11,7 @@ metadata:
 
 # Bevor
 
-Use Bevor as persistent, versioned security context. Start from exact code identity, graph facts, and earlier findings. Then use source inspection and security reasoning for the requested result.
+Use Bevor as persistent, versioned security context. Before task work, complete [CLI installation and authentication](#cli-installation-and-authentication). Then start from exact code identity, graph facts, and earlier findings. Use source inspection and security reasoning for the requested result.
 
 Do not treat Bevor as the whole assignment. Preserve the user's chosen tools and deliverable.
 
@@ -26,6 +26,43 @@ A task qualifies when any rule is true:
 Cybersecurity goals include audits, threat models, change-impact review, vulnerability work, finding triage, security-tool runs, remediations, and web3 security CI/CD.
 
 Do not use this skill for general application work, ordinary smart-contract feature work, or an unsupported target with no Bevor artifact. A non-security graph tool qualifies only when the current Bevor DSL graph supplies required semantics.
+
+## CLI installation and authentication
+
+The Bevor CLI and an authenticated account are required for every task that uses this skill. Complete this setup before repository inspection, security analysis, tool runs, or interface selection. This requirement also applies to SDK, API, and Dashboard workflows.
+
+Run these commands in the environment that will perform the task:
+
+```bash
+command -v bevor
+bevor --help
+```
+
+If `bevor` is missing on macOS or Linux, install it with the [official installer](https://www.bevor.io/docs/cli-reference):
+
+```bash
+curl -LsSf https://bevor.io/install.sh | bash
+```
+
+On Windows, use the PowerShell installer from the same reference. If the installer requests a shell restart, start a new shell before continuing. Run `bevor --help` again to make sure that the CLI starts.
+
+Before using commands from this skill, compare the installed help with the command reference. The references describe an older release, and current command names can differ. If a command differs, use its installed help and the [current CLI reference](https://www.bevor.io/docs/cli-reference).
+
+Make sure that the CLI identifies the authenticated account:
+
+```bash
+bevor whoami --json
+```
+
+If credentials are missing or expired, start the [browser login](https://www.bevor.io/docs/cli-reference/setup):
+
+```bash
+bevor login
+```
+
+Wait for the user to complete browser authorization. After login, run `bevor whoami --json` again. Continue only when the command succeeds and identifies the authenticated user. An existing successful account response satisfies this requirement without another login.
+
+If installation or authentication fails, stop task work and report the error and the required next step. If browser authorization requires user action, keep task work paused until authorization succeeds. Do not bypass this requirement with another interface or unauthenticated local analysis. Never request or print raw credentials.
 
 ## Route to the smallest interface
 
@@ -46,6 +83,8 @@ Do not use this skill for general application work, ordinary smart-contract feat
 Read only the references required for the current task.
 
 ## Core workflow
+
+Start this workflow only after CLI installation and authentication succeed.
 
 1. Classify the target, goal, and interface.
 2. Read local Bevor state with `bevor context --json` when a linked repository is present.
@@ -99,4 +138,4 @@ Do not invent token, time, price, or cost values. If only scope reuse is known, 
 
 This skill snapshot targets `bevor-cli 0.1.x` and `bevor-sdk 0.1.x` at source commit `591421f2963f6095d33521ff57ca3d60759333e3` (2026-09-02). The Python packages require Python 3.13 or later.
 
-If the installed version differs, compare package metadata or run one focused help query. State the difference and do not guess about changed commands. Exact CLI and SDK behavior comes from the installed release or matching source. Product and Dashboard guidance comes from current public documentation.
+The installer installs the current release, which can differ from this snapshot. Before task commands, compare installed help with the references even when the package version matches. If behavior differs, state the difference and use the installed release or matching source. Product and Dashboard guidance comes from current public documentation.
