@@ -17,7 +17,7 @@ The skill starts automatically for compatible cybersecurity targets, even when a
 
 ## Installation
 
-This skill requires the Bevor CLI and an authenticated account before any task work. The skill installs a missing CLI and starts browser login when needed. It continues only after `bevor whoami --json` succeeds and identifies the authenticated user. See [CLI installation and authentication](skills/bevor/SKILL.md#cli-installation-and-authentication).
+This skill requires the Bevor CLI and an authenticated account before any task work. The skill installs a missing CLI and starts browser login when needed. It continues only after `bevor whoami --json` succeeds and identifies the authenticated user. See [CLI installation, updates, and authentication](skills/bevor/SKILL.md#cli-installation-updates-and-authentication).
 
 With a compatible skills CLI:
 
@@ -34,6 +34,14 @@ For a manual installation, copy or link `skills/bevor/` into an agent skill dire
 | GitHub Copilot | `.github/skills/` or `.agents/skills/` | `~/.copilot/skills/` or `~/.agents/skills/` |
 | Cursor | `.cursor/skills/` or `.agents/skills/` | `~/.cursor/skills/` or `~/.agents/skills/` |
 | Gemini CLI | `.gemini/skills/` or `.agents/skills/` | `~/.gemini/skills/` or `~/.agents/skills/` |
+
+The skill uses [`bevor-cli 0.2.1` from PyPI](https://pypi.org/project/bevor-cli/) (current as of 2026-11-13). The [official installer](https://bevor.io/install.sh) installs or upgrades the CLI and installs the Bevor skill:
+
+```bash
+curl -LsSf https://bevor.io/install.sh | bash
+```
+
+Use `bevor --version` to inspect the installed release and `bevor upgrade` to check PyPI and apply an available update.
 
 ## Example requests
 
@@ -66,7 +74,7 @@ The entry file contains shared routing and safety rules. Agents load a focused r
 
 ## Compatibility
 
-The current snapshot targets `bevor-cli 0.1.x` and `bevor-sdk 0.1.x`. Both Python packages require Python 3.13 or later.
+The current CLI distribution is `bevor-cli 0.2.1`. The detailed command references remain pinned to the `bevor-cli 0.1.0` and `bevor-sdk 0.1.0` source snapshot. These Python packages require Python 3.13 or later, and the skill tells agents to prefer installed `0.2.1` help when the snapshot differs.
 
 The current source implements the full native semantic graph for Solidity. Rust, Anchor, and Soroban graph types exist, but this skill does not claim full native DSL graph support until their parser and edge pipeline are released.
 

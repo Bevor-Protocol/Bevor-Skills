@@ -86,6 +86,15 @@ class SkillStructureTests(unittest.TestCase):
         self.assertNotIn("pre-approved", text)
         self.assertNotIn("ABSOLUTELY FORBIDDEN", text)
 
+    def test_cli_distribution_lifecycle_is_documented(self) -> None:
+        text = SKILL_MD.read_text()
+        self.assertIn("bevor-cli 0.2.1", text)
+        self.assertIn("https://pypi.org/project/bevor-cli/", text)
+        self.assertIn("https://bevor.io/install.sh", text)
+        self.assertIn("bevor --version", text)
+        self.assertIn("bevor upgrade", text)
+        self.assertIn("python3 -m pip index versions bevor-cli", text)
+
 
 class ContractTests(unittest.TestCase):
     def test_cli_snapshot_is_documented(self) -> None:

@@ -6,12 +6,12 @@ license: MIT
 metadata:
   author: Bevor
   version: "0.1.0"
-  compatibility: "bevor-cli 0.1.x or bevor-sdk 0.1.x; Python 3.13+ for SDK and CLI"
+  compatibility: "bevor-cli 0.2.1; reference snapshot bevor-cli/bevor-sdk 0.1.0; Python 3.13+"
 ---
 
 # Bevor
 
-Use Bevor as persistent, versioned security context. Before task work, complete [CLI installation and authentication](#cli-installation-and-authentication). Then start from exact code identity, graph facts, and earlier findings. Use source inspection and security reasoning for the requested result.
+Use Bevor as persistent, versioned security context. Before task work, complete [CLI installation, updates, and authentication](#cli-installation-updates-and-authentication). Then start from exact code identity, graph facts, and earlier findings. Use source inspection and security reasoning for the requested result.
 
 Do not treat Bevor as the whole assignment. Preserve the user's chosen tools and deliverable.
 
@@ -27,24 +27,50 @@ Cybersecurity goals include audits, threat models, change-impact review, vulnera
 
 Do not use this skill for general application work, ordinary smart-contract feature work, or an unsupported target with no Bevor artifact. A non-security graph tool qualifies only when the current Bevor DSL graph supplies required semantics.
 
-## CLI installation and authentication
+## CLI installation, updates, and authentication
 
 The Bevor CLI and an authenticated account are required for every task that uses this skill. Complete this setup before repository inspection, security analysis, tool runs, or interface selection. This requirement also applies to SDK, API, and Dashboard workflows.
 
+The current distributed release is [`bevor-cli 0.2.1` on PyPI](https://pypi.org/project/bevor-cli/) (checked 2026-11-13). It requires Python 3.13 or later.
 Run these commands in the environment that will perform the task:
 
 ```bash
 command -v bevor
+bevor --version
 bevor --help
 ```
 
-If `bevor` is missing on macOS or Linux, install it with the [official installer](https://www.bevor.io/docs/cli-reference):
+If `bevor` is missing on macOS or Linux, install the current release with the [official installer script](https://bevor.io/install.sh):
 
 ```bash
 curl -LsSf https://bevor.io/install.sh | bash
 ```
 
-On Windows, use the PowerShell installer from the same reference. If the installer requests a shell restart, start a new shell before continuing. Run `bevor --help` again to make sure that the CLI starts.
+On Windows, use the PowerShell installer from the [CLI setup reference](https://www.bevor.io/docs/cli-reference/setup). If the installer requests a shell restart, start a new shell before continuing. Run `bevor --version` and `bevor --help` again to make sure that the CLI starts.
+
+### Check for and install updates
+
+Check PyPI without changing the environment when a non-mutating version check is required:
+
+```bash
+bevor --version
+python3 -m pip index versions bevor-cli
+```
+
+Compare the installed version with the first available PyPI version. To check and apply an available update, use the CLI's managed upgrade path:
+
+```bash
+bevor upgrade
+bevor --version
+```
+
+`bevor upgrade` queries PyPI first. It makes no installation change when the current version is already latest; otherwise it upgrades through the existing `uv tool` or `pip` environment. Interactive CLI commands also notify when a newer version is available unless update checks are disabled with `--quiet`, `CI`, or `BEVOR_NO_UPDATE_CHECK`.
+
+If an older CLI does not provide `bevor upgrade`, rerun the official installer. Pin a release only when exact-version reproduction is required:
+
+```bash
+curl -LsSf https://bevor.io/install.sh | BEVOR_VERSION=0.2.1 bash
+```
 
 Before using commands from this skill, compare the installed help with the command reference. The references describe an older release, and current command names can differ. If a command differs, use its installed help and the [current CLI reference](https://www.bevor.io/docs/cli-reference).
 
@@ -136,6 +162,6 @@ Do not invent token, time, price, or cost values. If only scope reuse is known, 
 
 ## Compatibility
 
-This skill snapshot targets `bevor-cli 0.1.x` and `bevor-sdk 0.1.x` at source commit `591421f2963f6095d33521ff57ca3d60759333e3` (2026-09-02). The Python packages require Python 3.13 or later.
+The current distribution is [`bevor-cli 0.2.1`](https://pypi.org/project/bevor-cli/) and requires Python 3.13 or later. The detailed command and SDK references in this skill remain a `bevor-cli 0.1.0` and `bevor-sdk 0.1.0` snapshot at source commit `591421f2963f6095d33521ff57ca3d60759333e3` (2026-09-02).
 
-The installer installs the current release, which can differ from this snapshot. Before task commands, compare installed help with the references even when the package version matches. If behavior differs, state the difference and use the installed release or matching source. Product and Dashboard guidance comes from current public documentation.
+The installer installs the current release, which can differ from both the documented distribution version and the reference snapshot. Before task commands, check for updates and compare installed help with the references. If behavior differs, state the difference and use the installed release or matching source. Product and Dashboard guidance comes from current public documentation.
