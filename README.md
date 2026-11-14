@@ -10,8 +10,7 @@ Give your coding agent the code graph, findings, and review history behind your 
 
 Bevor connects security work to exact source versions. This skill helps agents navigate semantic code graphs, reuse earlier findings, review changes, and save results with their evidence and analysis history.
 
-**Supported AI platforms:**
-[![Claude Code](assets/badges/claude-code.svg)](https://code.claude.com/) [![Cursor](assets/badges/cursor.svg)](https://cursor.com) [![Codex](assets/badges/codex.svg)](https://openai.com/codex/) [![GitHub Copilot](assets/badges/github-copilot.svg)](https://github.com/features/copilot) [![Gemini CLI](assets/badges/gemini-cli.svg)](https://geminicli.com/)
+[![Claude Code](assets/badges/claude-code.svg)](https://code.claude.com/) [![Cursor](assets/badges/cursor.svg)](https://cursor.com) [![Codex](assets/badges/codex.svg)](https://openai.com/codex/)
 
 These clients can load the shared [Agent Skills format](https://agentskills.io).
 
