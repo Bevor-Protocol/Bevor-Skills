@@ -39,7 +39,7 @@ Locations:
 - `physical`: supply `uri` and a complete pair: `startLine/endLine`, `charOffset/charLength`, or `byteOffset/byteLength`.
 - `logical`: supply `fully_qualified_name`.
 
-Prefer graph-node locations. Non-Solidity files may lack a resolvable graph location.
+Prefer graph-node locations. Files outside the processed graph may lack a resolvable graph location.
 
 ```bash
 bevor findings list --json

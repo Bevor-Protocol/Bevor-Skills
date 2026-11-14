@@ -17,6 +17,14 @@ Read [README.md](README.md) for setup and [CLAUDE.md](CLAUDE.md) for repository 
 
 Open an [issue](https://github.com/Bevor-Protocol/Bevor-Skills/issues/new) before a substantial redesign so the intended behavior can be discussed. Small corrections and focused fixes can go directly to a pull request.
 
+## Request language support
+
+Bevor supports Solidity, Anchor Rust, and GenLayer Intelligent Python Contracts, with experimental support for Soroban Rust.
+
+We'd love developers and security researchers to request support for other major smart contract languages through [GitHub issues](https://github.com/Bevor-Protocol/Bevor-Skills/issues/new) or the [Bevor waitlist](https://www.bevor.io/waitlist). These requests help us prioritize what to support next.
+
+Tell us the language and framework, your development or security use case, and the capabilities you need. A public example project is helpful when available; a language request does not require an implementation or pull request.
+
 ## Repository map
 
 ```text

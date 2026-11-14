@@ -42,7 +42,7 @@ class SkillStructureTests(unittest.TestCase):
         self.assertLessEqual(len(description), 1024)
         self.assertIn("even if Bevor is not named", description)
         self.assertIn("web3 security CI/CD", description)
-        self.assertIn("current Solidity graph", description)
+        self.assertIn("available graph supplies required code semantics for the target language", description)
         self.assertNotIn("<", description)
         self.assertNotIn(">", description)
         self.assertNotIn("TODO", text)

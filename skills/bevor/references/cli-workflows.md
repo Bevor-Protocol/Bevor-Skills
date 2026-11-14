@@ -61,7 +61,7 @@ bevor analyses create --new --name "Audit" --yes --json
 bevor status --json
 ```
 
-Keep finding files, reports, and temporary output outside the source tree before fingerprinting. Source uploads can include UTF-8 files beyond Solidity.
+Keep finding files, reports, and temporary output outside the source tree before fingerprinting. Source uploads can include UTF-8 files beyond contract source.
 
 An existing exact version can cause a collision result even with a successful exit code. Inspect the response type and returned candidates. Select the intended existing analysis; use `--collision force` only for an intentionally separate lineage. Do not blindly retry.
 

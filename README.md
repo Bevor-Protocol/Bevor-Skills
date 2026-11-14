@@ -8,9 +8,20 @@ Give your coding agent the code graph, findings, and review history behind your 
 
 [Website](https://bevor.io) · [Docs](https://bevor.io/docs) · [Dashboard](https://app.bevor.io) · [Join the waitlist](https://www.bevor.io/waitlist) · [X](https://x.com/Bevor_io) · [LinkedIn](https://www.linkedin.com/company/bevor/)
 
-Bevor connects security work to exact source versions. This skill helps agents navigate the Solidity semantic graph, reuse earlier findings, review changes, and save results with their evidence and analysis history.
+Bevor connects security work to exact source versions. This skill helps agents navigate semantic code graphs, reuse earlier findings, review changes, and save results with their evidence and analysis history.
 
 **Compatible clients:** Codex · Claude Code · Cursor · GitHub Copilot · Gemini CLI. Each can load the shared [Agent Skills format](https://agentskills.io).
+
+## Supported smart contract languages
+
+| Language / framework | Support |
+| --- | --- |
+| Solidity | Supported |
+| Anchor Rust | Supported |
+| GenLayer Intelligent Python Contracts | Supported |
+| Soroban Rust | Experimental |
+
+We'd love to hear from developers and security researchers working with other major smart contract languages. [Request language support in GitHub issues](https://github.com/Bevor-Protocol/Bevor-Skills/issues/new) or tell us what you need through the [Bevor waitlist](https://www.bevor.io/waitlist) so we can prioritize accordingly. Include the language or framework and the development or security workflow you'd like Bevor to support.
 
 ## Install, run, and update
 
@@ -133,7 +144,7 @@ Code upload and analysis creation are separate from running Bevor's paid securit
 
 ## Compatibility and reference
 
-The reviewed CLI/SDK contract is **0.2.1**, with Python **3.13+**. The [release pin](tests/fixtures/cli-release.txt) records the package used by validation; it is not a claim that this is the newest release. Native semantic graph workflows currently target Solidity. Other ecosystems require supported result exchange or a verified integration.
+The reviewed CLI/SDK contract is **0.2.1**, with Python **3.13+**. The [release pin](tests/fixtures/cli-release.txt) records the package used by validation; it is not a claim that this is the newest release. See [supported smart contract languages](#supported-smart-contract-languages) for language availability. Graph operations and coverage can vary by target, particularly for experimental Soroban support.
 
 | Reference | Use it for |
 | --- | --- |

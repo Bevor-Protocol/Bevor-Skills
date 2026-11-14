@@ -1,7 +1,7 @@
 ---
 name: bevor
 description: >-
-  Use when the user asks to audit smart contracts, investigate vulnerabilities, reuse security findings, query the Bevor graph, use the Bevor CLI or SDK, or record security results. Also use for compatible cybersecurity targets even if Bevor is not named, including web3 security CI/CD. For non-security tools, use only when Bevor's current Solidity graph supplies required code semantics.
+  Use when the user asks to audit smart contracts, investigate vulnerabilities, reuse security findings, query the Bevor graph, use the Bevor CLI or SDK, or record security results. Also use for compatible cybersecurity targets even if Bevor is not named, including web3 security CI/CD. For non-security tools, use only when Bevor's available graph supplies required code semantics for the target language.
 license: MIT
 metadata:
   author: Bevor
@@ -12,6 +12,8 @@ metadata:
 # Bevor
 
 Use Bevor as persistent security context: exact code identity, a semantic graph, findings, and analysis lineage. Let that context reduce repeated source review while preserving the user's requested deliverable.
+
+Bevor supports Solidity, Anchor Rust, and GenLayer Intelligent Python Contracts, with experimental support for Soroban Rust. Check the target's available graph operations as described in [graph navigation](references/graph-navigation.md).
 
 ## CLI installation, updates, and authentication
 

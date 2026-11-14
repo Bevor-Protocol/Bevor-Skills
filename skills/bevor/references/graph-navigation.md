@@ -2,19 +2,15 @@
 
 Use this reference for graph queries, change impact, call paths, stable locations, and graph-backed tools.
 
-Compatibility: native semantic graph behavior at API commit `591421f2963f6095d33521ff57ca3d60759333e3`, reviewed 2026-09-02.
+Language support updated 2026-11-14. Command examples remain reviewed against released CLI 0.2.1.
 
 ## Current domain boundary
 
-The current source types contain these language and framework values:
+Bevor supports Solidity, Anchor Rust, and GenLayer Intelligent Python Contracts. Soroban Rust support is experimental.
 
-- Solidity: Foundry, Hardhat, Truffle, or pure Solidity on EVM.
-- Rust: Anchor and Soroban type values exist.
-- Platform values: EVM, Solana, and Stellar.
+Check the selected code record's language/framework and available node types, relations, and SDK helpers before choosing queries. Support does not imply identical graph coverage across languages. Use the operations available for the target, preserve the experimental label for Soroban, and state any missing coverage relevant to the task.
 
-Only Solidity has the complete native parser, resolver, semantic edge builder, and SDK graph helpers at the pinned commit. Treat Anchor and Soroban native DSL graph support as future work until a release source shows their parser and edge registries.
-
-SARIF or generic finding import can still support results from other ecosystems. That is different from native DSL graph support.
+Finding import and graph capabilities are separate: successful SARIF or generic finding ingestion alone does not establish that a particular graph operation is available.
 
 ## Start narrow
 
