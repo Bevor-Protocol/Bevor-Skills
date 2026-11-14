@@ -1,110 +1,154 @@
-# Bevor Skill
+# Bevor Agent Skill
 
-An Agent Skill for graph-aware cybersecurity work and Bevor ecosystem development.
+Give your coding agent the code graph, findings, and review history behind your next security decision.
 
-The skill starts automatically for compatible cybersecurity targets, even when a request does not name Bevor. It uses exact code identity, semantic graph relations, earlier findings, and structured result exchange to reduce repeated work.
+[![Validate skill](https://github.com/Bevor-Protocol/Bevor-Skills/actions/workflows/validate.yml/badge.svg)](https://github.com/Bevor-Protocol/Bevor-Skills/actions/workflows/validate.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Agent Skills](https://img.shields.io/badge/Agent_Skills-compatible-5865F2)](https://agentskills.io)
 
-## Capabilities
+[Website](https://bevor.io) · [Docs](https://bevor.io/docs) · [Dashboard](https://app.bevor.io) · [Join the waitlist](https://www.bevor.io/waitlist) · [X](https://x.com/Bevor_io) · [LinkedIn](https://www.linkedin.com/company/bevor/)
 
-- Control the Bevor CLI without repeated help discovery.
-- Navigate the Solidity semantic graph and select affected scope.
-- Reuse exact-version findings, remediations, and analysis history.
-- Exchange SARIF and remove duplicate findings before submission.
-- Build Python tools with `bevor-sdk` or non-Python tools with OpenAPI.
-- Connect existing web3 security CI jobs to Bevor.
-- Run a cheap static baseline before heavyweight AI security tools.
-- Review findings, graphs, and project history in the Dashboard.
+Bevor connects security work to exact source versions. This skill helps agents navigate the Solidity semantic graph, reuse earlier findings, review changes, and save results with their evidence and analysis history.
 
-## Installation
+**Compatible clients:** Codex · Claude Code · Cursor · GitHub Copilot · Gemini CLI. Each can load the shared [Agent Skills format](https://agentskills.io).
 
-Remote Bevor operations require the CLI and an authenticated account. Check setup once per session/environment and reuse it across audits. Documentation edits and offline contract tests need no login. See [CLI installation, updates, and authentication](skills/bevor/SKILL.md#cli-installation-updates-and-authentication).
+## Install, run, and update
 
-With a compatible skills CLI:
+### Ask your agent
 
-```bash
-npx skills add Bevor-Protocol/Bevor-Skills
+**Install and start a review**
+
+```text
+Install the Bevor skill from https://github.com/Bevor-Protocol/Bevor-Skills
+and use it to audit this repository. Reuse existing Bevor project context
+where available, and link the resulting analysis in the dashboard.
 ```
 
-For a manual installation, copy or link `skills/bevor/` into an agent skill directory:
+**Continue an existing review**
 
-| Agent | Project directory | Personal directory |
-| --- | --- | --- |
-| OpenAI Codex | `.agents/skills/` | `~/.agents/skills/` |
-| Claude Code | `.claude/skills/` | `~/.claude/skills/` |
-| GitHub Copilot | `.github/skills/` or `.agents/skills/` | `~/.copilot/skills/` or `~/.agents/skills/` |
-| Cursor | `.cursor/skills/` or `.agents/skills/` | `~/.cursor/skills/` or `~/.agents/skills/` |
-| Gemini CLI | `.gemini/skills/` or `.agents/skills/` | `~/.gemini/skills/` or `~/.agents/skills/` |
-
-The skill uses [`bevor-cli 0.2.1` from PyPI](https://pypi.org/project/bevor-cli/) (current as of 2026-11-13). The [official installer](https://bevor.io/install.sh) installs or upgrades the CLI and installs the Bevor skill:
-
-```bash
-curl -LsSf https://bevor.io/install.sh | bash
+```text
+Use Bevor to review the security impact of this branch. Create a child
+version of the current analysis, verify inherited findings against the
+new source, and audit the changed scope.
 ```
 
-Use `bevor --version` to inspect the installed release and `bevor upgrade` to check PyPI and apply an available update.
+**Update the skill**
+
+```text
+Update the Bevor skill to the latest version from
+https://github.com/Bevor-Protocol/Bevor-Skills using its installation method.
+Check the CLI version separately and report any compatibility mismatch.
+```
+
+The skill can also activate automatically for compatible security tasks. Explicitly naming Bevor makes your intended workflow clear.
+
+### Install from your terminal
+
+**CLI and skill on macOS/Linux:** the official installer installs or updates the CLI and copies the skill into personal skill directories for the compatible clients listed above.
+
+```bash
+curl -LsSf https://bevor.io/install.sh | sh
+```
+
+Open a new shell if `bevor` is not on your PATH after installation.
+
+**Skill only:** if you already have the CLI, use the [skills CLI](https://github.com/vercel-labs/skills). This route requires Node.js 22.20+ and npm.
+
+```bash
+# Install for this project; select your coding agent when prompted.
+npx skills add Bevor-Protocol/Bevor-Skills --skill bevor
+
+# Or install for your user across projects.
+npx skills add Bevor-Protocol/Bevor-Skills --skill bevor -g
+```
+
+Restart your coding agent after installation. For a manual install, copy the complete [`skills/bevor/`](skills/bevor/) directory into your client's skill directory, preserving its references and scripts. See the skills CLI's [client directory reference](https://github.com/vercel-labs/skills/blob/main/docs/agents.md).
+
+### Connect your account
+
+Remote operations need an authenticated Bevor account. Open the [dashboard](https://app.bevor.io), or [join the waitlist](https://www.bevor.io/waitlist) if you need access.
+
+For staging, set both URLs **before** authentication or other remote calls:
+
+```bash
+export BEVOR_API_URL=https://staging.api.bevor.io
+export BEVOR_APP_URL=https://staging.app.bevor.io
+```
+
+Check your CLI and account:
+
+```bash
+bevor --version
+bevor whoami --json
+```
+
+If authentication is missing or expired, run `bevor login` and complete browser authorization. Then run `bevor status --json` from the target repository. The skill's [setup guide](skills/bevor/references/cli-workflows.md) covers selecting a workspace, linking a project, matching source, and creating an analysis.
+
+### Keep the CLI and skill current
+
+```bash
+# Update the CLI package.
+bevor upgrade
+
+# Check and update a skill installed through the skills CLI.
+npx skills check
+npx skills update bevor
+```
+
+`bevor upgrade` updates the CLI, not skill files. Rerun the official installer to refresh installer-managed copies of both. For manual skill installations, replace the skill directory from the reviewed repository revision.
+
+## One skill, connected workflows
+
+| Workflow | What the skill helps your agent do |
+| --- | --- |
+| Security review | Establish exact code identity, inspect relevant execution paths, and attach findings to semantic locations. |
+| Review across versions | Create child analysis versions, inspect carryover, and check what needs another review. |
+| Findings exchange | Deduplicate and batch new findings through YAML, Bevor JSON, or external-tool SARIF. |
+| Graph investigation | Follow calls, state access, inheritance, and related code to investigate a security question. |
+| Tooling and CI | Use the CLI, Python SDK, or API while preserving existing tools, run identity, and security gates. |
+| Team review | Keep findings, evidence, and analysis history available in the Bevor dashboard. |
+
+The entry point is [`bevor`](skills/bevor/SKILL.md). It loads the focused references needed for each task.
 
 ## Example requests
 
 ```text
-Audit this Cantina target.
-What changed around this contract and which findings already exist?
-Import this Slither SARIF and remove duplicate findings.
-Record the existing security CI runs in Bevor.
-Build a security analyzer with the Bevor graph.
-Use the Bevor SDK from this Python service.
+Review findings.yaml and import the new findings as one batch into the selected analysis.
+
+Import this Slither SARIF, check for duplicates, and verify the stored findings.
+
+Use the Bevor graph to investigate which entrypoints can reach this state write.
 ```
 
-## Structure
+## How reviews stay grounded
 
-```text
-skills/bevor/
-├── SKILL.md
-├── agents/openai.yaml
-├── references/
-└── scripts/
+1. **Match the source.** Check workspace, project, code fingerprint, processing status, analysis, and version before reusing context.
+2. **Investigate the relevant scope.** Query the graph and confirm security behavior in source. Reachability alone does not establish a vulnerability.
+3. **Review inherited findings.** Carryover informs the next review. An automatic remediation label still needs verification against the changed code.
+4. **Save a reviewed batch.** Preserve finding identity, avoid duplicates, and read back accepted results before reporting completion.
 
-tests/
-├── trigger_cases.json
-├── workflow_cases.json
-├── fixtures/cli_commands.txt
-└── test_skill.py
-```
+CLI 0.2.1 finding writes apply immediately. Bulk import creates findings; existing records require edits. Prefer YAML or Bevor JSON when preserving recommendations and PoCs matters, because the tested SARIF converter drops those fields. See [finding exchange](skills/bevor/references/findings-exchange.md).
 
-The entry file contains shared routing and safety rules. Agents load a focused reference only when the task requires it.
+Code upload and analysis creation are separate from running Bevor's paid security pipeline. The skill follows the user's requested scope for remote operations and reports measured reuse without inventing token, time, or cost savings.
 
-## Compatibility
+## Compatibility and reference
 
-The tested release is `bevor-cli 0.2.1`, requiring Python 3.13+. Command paths and options come from its executable Typer application. Source main can contain unreleased changes even when its version string matches PyPI.
+The reviewed CLI/SDK contract is **0.2.1**, with Python **3.13+**. The [release pin](tests/fixtures/cli-release.txt) records the package used by validation; it is not a claim that this is the newest release. Native semantic graph workflows currently target Solidity. Other ecosystems require supported result exchange or a verified integration.
 
-Finding writes apply immediately to the selected analysis version. The skill reviews local batches before submission and does not promise an unavailable staged-commit workflow.
+| Reference | Use it for |
+| --- | --- |
+| [CLI workflows](skills/bevor/references/cli-workflows.md) | Setup, source selection, child versions, and recovery. |
+| [Graph navigation](skills/bevor/references/graph-navigation.md) | Queries, relations, and released-command workarounds. |
+| [Finding exchange](skills/bevor/references/findings-exchange.md) | Bulk payloads, SARIF limitations, and duplicate control. |
+| [Generated CLI command tree](skills/bevor/references/cli-command-tree.md) | Released commands and options. |
+| [Public documentation](https://bevor.io/docs) | Product, CLI, SDK, and API documentation. |
 
-The current source implements the full native semantic graph for Solidity. Rust, Anchor, and Soroban graph types exist, but this skill does not claim full native DSL graph support until their parser and edge pipeline are released.
+## Contributing
 
-## Validation
+Help improve real workflows: clearer instructions, reproducible bug fixes, better examples, and checks that catch CLI drift. Start with [CONTRIBUTING.md](CONTRIBUTING.md) for the repository map, local validation, pull request process, and bug-report details.
 
-```bash
-python3 -m pip install "bevor-cli==$(cat tests/fixtures/cli-release.txt)" -r tests/fixtures/cli-dependencies.txt
-python3 -m unittest discover -s tests -v
-python3 skills/bevor/scripts/check_cli_contract.py
-python3 skills/bevor/scripts/check_docs_links.py
-```
-
-PR checks pin the CLI and Typer/Click metadata renderer versions. They validate the command contract, documented command/option examples, and YAML finding examples without authentication or network requests to Bevor. Link checks use public documentation only.
-
-A scheduled/manual workflow installs the latest public CLI and fails on contract drift. It uploads a generated update patch, installed dependency versions, and validation output. It has read-only repository permissions and no Bevor credentials. After installing the intended release, regenerate with:
-
-```bash
-python3 skills/bevor/scripts/check_cli_contract.py --update
-```
-
-Review workflow prose and parser behavior after regeneration. The checker verifies syntax and metadata; it does not execute remote commands or prove semantic accuracy. Run short staging tests before accepting behavioral changes.
-
-The vendored checker comes from `bevorai-api/scripts/codegen/python/cli_contract.py`, developed against source base `a4593aad271d911cd8868670fa568a745e7e050d`. Its SHA-256 is `535e18dc094123ad87af715557071879b552091c211248600a20ff522fa9000b`. Refresh it from the reviewed CLI release-reference artifact when that exporter changes.
-
-## Documentation
-
-Use [www.bevor.io/docs](https://www.bevor.io/docs) for current public documentation.
+For sensitive security issues, follow the [private reporting guidance](CONTRIBUTING.md#security-reports). Keep private source and credentials out of public issues.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+[MIT](LICENSE) · Copyright © 2026 Bevor.
