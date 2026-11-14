@@ -1,61 +1,27 @@
 # Platform and Dashboard
 
-Use the Dashboard for interactive review, team decisions, graph exploration, and project-level trends.
+Reviewed against app source b2525415 on 2026-11-14. Use the Dashboard for findings, source and graph evidence, lineage, and collaboration.
 
-Behavior basis: web application commit `a1ba17fe7aa769fb6f163b79d84a4343f9956cdd`, reviewed 2026-09-02. Public product guidance can change independently.
+## Identity and links
 
-## Choose the Dashboard for
+Confirm workspace, project, analysis owner, analysis ID, and selected version. A deep link must set workspace/project context:
 
-- Reviewing findings by severity and staged state.
-- Reading evidence, recommendation, references, and related code.
-- Moving between the finding list and entrypoint scope views.
-- Viewing findings on source files and graph nodes.
-- Comparing the full graph with the reanalysis view.
-- Distinguishing inherited and reanalyzed scopes.
-- Reviewing borrowed findings and remediation history.
-- Adding, editing, reverting, or staging deletion of a finding.
-- Collaborating through finding comments and analysis chats.
-- Reviewing project finding history, network breakdown, and user activity.
+```text
+APP_URL/project/users/USER_ID/analyses/ANALYSIS_ID?workspace=WORKSPACE_ID&project=PROJECT_ID
+```
 
-Use the CLI, SDK, or API for automation and bulk operations.
+Add `&version=VERSION_ID` to preserve historical context. Use `https://staging.app.bevor.io` for APP_URL when the API is staging. The owner ID belongs to the analysis user, not necessarily the currently authenticated user. Prefer a copied Dashboard URL when available.
 
-## Review procedure
+## Review
 
-1. Confirm the team, project, code version, analysis, and selected HEAD.
-2. Start with staged changes if a submission awaits review.
-3. Filter by severity and status.
-4. Open a finding and inspect its code or graph location.
-5. Check the related entrypoint and relation path.
-6. Compare inherited and reanalyzed scope.
-7. Read comments, validation state, and remediation history.
-8. Reject duplicates or attach stronger evidence to the existing identity.
-9. Commit only after the staged difference is understood and approved.
+1. Verify exact code and selected HEAD.
+2. Inspect each finding's evidence, semantic node, severity, and recommendation.
+3. Compare inherited findings and entrypoints with changed scope.
+4. Verify purported remediations against source, especially after renames.
+5. Review local proposed changes before writing them remotely.
 
-The UI can stage a finding addition, edit, or deletion. Staging is not a commit.
+CLI 0.2.1 writes findings immediately. Do not promise a staged review or commit button without verifying that the deployed UI supplies that workflow.
 
-Acknowledgement changes validation state. Confirm the current value and intended new value before changing it.
+## Analytics
 
-## Graph view
-
-The application marks findings and analysis entrypoints on the graph. The reanalysis view focuses on nodes reachable from reanalyzed entrypoints.
-
-Use it to understand scope and navigate evidence. Do not infer that every reachable node is vulnerable or that a dimmed node is safe.
-
-## Project analytics
-
-Use project analytics to compare history, not to reward output volume.
-
-When attribution data exists, prefer:
-
-- Unique validated findings.
-- Duplicate and false-positive rates.
-- Validated proofs of concept.
-- Time and cost per unique validated finding.
-- Remediation outcomes.
-- Tool performance on similar code and vulnerability classes.
-
-Raw finding count alone is not a quality measure.
-
-## Source differences
-
-If the public docs describe the Dashboard as coming soon but the application is available, state the environment and source date. Use the live application for exact UI behavior and current public docs for product guidance.
+Prefer unique validated findings, accepted proofs, false-positive rates, reviewed scope, and remediation outcomes. Raw finding count alone is not a quality measure. Report time and cost only with a defensible baseline and matching experiment conditions.

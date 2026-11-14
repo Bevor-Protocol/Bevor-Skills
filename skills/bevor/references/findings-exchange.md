@@ -1,136 +1,98 @@
 # Finding exchange and duplicate control
 
-Use this reference to import, export, normalize, deduplicate, stage, review, or commit findings.
+Reviewed against released CLI/SDK 0.2.1 on 2026-11-14.
 
-Compatibility: `bevor-cli 0.1.0` and `bevor-sdk 0.1.0`, source commit `591421f2963f6095d33521ff57ca3d60759333e3`, reviewed 2026-09-02.
+## Review before the write
 
-## Select a format
+Finding add, import, edit, and delete operate directly on HEAD or an explicit version. There is no separate CLI commit operation. Preserve the review boundary by validating and reviewing the local batch before the authorized write.
 
-1. Keep valid SARIF from a source tool as SARIF.
-2. Use typed `FindingBodyDict` objects in Python.
-3. Use JSON with a top-level `findings` array when a producer needs generic JSON.
-4. For CLI directory import, use one YAML mapping per `.yaml` or `.yml` file.
+Resolve exact code identity, fetch existing findings, deduplicate by root cause and semantic location, and submit once. Retain accepted IDs and read back the result. Do not retry an uncertain import without checking what already exists.
 
-Keep the producer name in `source`. Preserve rule IDs, original locations, evidence, and references.
+## Supported import formats
 
-## Bevor finding shape
+`bevor findings import` accepts a YAML file, a directory of YAML files, a SARIF file, or JSON with a top-level `findings` array. YAML supports multiple mappings separated by `---`.
 
-A typed SDK finding uses:
+For new findings authored by the agent, collect the reviewed batch and import it once. Prefer multi-document YAML or Bevor JSON when preserving exact node IDs, recommendations, and PoCs matters. Avoid a loop of one `findings add` call per new finding.
 
-```json
-{
-  "source": "tool-name",
-  "metadata": {
-    "type": "reentrancy",
-    "level": "high",
-    "name": "Short finding name",
-    "explanation": "Evidence, exploit path, and effect",
-    "recommendation": "Concrete repair",
-    "reference": "https://example.com/rule"
-  },
-  "location": {
-    "strategy": "node_id",
-    "scope_id": "ENTRYPOINT_NODE_ID",
-    "location_id": "EVIDENCE_NODE_ID"
-  }
-}
-```
-
-Location strategies are:
-
-- `node_id`: `scope_id` and/or `location_id`.
-- `physical`: `uri` plus optional line, column, character, or byte ranges.
-- `logical`: `fully_qualified_name`.
-
-The CLI YAML shape is flatter:
+Use nested YAML, not the obsolete flat shape:
 
 ```yaml
-type: reentrancy
-level: high
-name: Short finding name
-description: Evidence, exploit path, and effect
-recommendation: Concrete repair
-reference: https://example.com/rule
-source: slither
-scope_id: ENTRYPOINT_NODE_ID
-location_id: EVIDENCE_NODE_ID
+tool: independent-review
+location:
+  strategy: node_id
+  node_id: ENTRYPOINT_NODE_ID
+  location_id: EVIDENCE_NODE_ID
+metadata:
+  type: access-control
+  level: high
+  name: Unauthorized state change
+  explanation: Evidence, preconditions, attack path, and effect.
+  recommendation: Enforce the required permission at this entrypoint.
+  poc: Reproduction steps or a test reference.
 ```
 
-Required YAML fields are `type`, `level`, `name`, and nonempty `description`. Supply at least one of `scope_id` or `location_id`.
+The parser requires a location. Metadata, when present, requires type, level, name, and nonempty explanation. Levels are critical, high, medium, and low. Omit optional keys rather than substituting unsupported fields.
 
-Supported Bevor levels are `critical`, `high`, `medium`, and `low`.
+Locations:
 
-## SARIF conversion
+- `node_id`: supply `node_id`, `location_id`, or both. A location-only record can fan out to every reachable entrypoint.
+- `physical`: supply `uri` and a complete pair: `startLine/endLine`, `charOffset/charLength`, or `byteOffset/byteLength`.
+- `logical`: supply `fully_qualified_name`.
 
-The SDK exposes:
+Prefer graph-node locations. Non-Solidity files may lack a resolvable graph location.
+
+```bash
+bevor findings list --json
+bevor findings import findings.yaml
+bevor findings list --json
+```
+
+For one YAML mapping use `bevor findings add --file finding.yaml`. For SARIF use `bevor findings import results.sarif`. Neither write command accepts `--json`. Use the list command to read back results.
+
+Validate local YAML without authentication:
 
 ```python
-from bevor_sdk.helpers.converters.sarif import (
-    bevor_to_sarif,
-    bevor_to_sarif_sync,
-    sarif_to_bevor,
-)
+from pathlib import Path
+from bevor_cli.findings_yaml import FindingYamlParser
+
+records = FindingYamlParser.from_file(Path("findings.yaml")).parse_many()
+assert records
 ```
 
-At SDK 0.1.0, the default SARIF-to-Bevor level map is:
+This checks shape, not semantic duplicates, node existence, or finding validity.
 
-| SARIF | Bevor |
-| --- | --- |
-| `error` | `critical` |
-| `warning` | `high` |
-| `note` | `medium` |
-| `none` | `low` |
+## SARIF boundaries in release 0.2.1
 
-Review this mapping against the producer's severity meaning. Do not raise severity only because the format converter maps a transport level.
+Use SARIF for external tools that already emit it. Validate the conversion locally with `from bevor_sdk.helpers.sarif import sarif_to_bevor`, then compare the converted records with the source results before upload.
 
-## Duplicate procedure
+- Severity maps as `error → critical`, `warning → high`, `note → medium`, and `none → low`. An omitted level becomes high. Review this against the producer's severity meaning.
+- Import reads only the first physical or logical location. Bevor node-ID properties do not override it.
+- Import does not preserve recommendation or PoC properties. Native Bevor SARIF export followed by import also changes title/explanation fields. It is not a lossless backup or replay format.
+- Physical locations can resolve to multiple entrypoints or no finding. Read back the results and compare counts, metadata, severity, and resolved locations. A successful import exit alone is insufficient.
 
-Before submission:
+Prefer YAML or Bevor JSON for full-fidelity replay of your own findings. SARIF import success establishes transport compatibility, not preservation of every original field.
 
-1. Remove duplicates within the new batch.
-2. Compare with staged findings on the exact analysis version.
-3. Compare with committed and inherited findings.
-4. Prefer `origin_finding_id` and graph identity when available.
-5. Otherwise compare rule or type, semantic location, root cause, asset, and attack path.
-6. Do not compare only the title.
-7. Merge stronger evidence, references, affected scopes, and supported severity.
-8. Preserve the first discovery source. Record later sources as corroboration or evidence.
-9. Keep findings separate when cause, attack path, asset, or repair differs.
+## Review marks without findings
 
-The bulk-import service does not promise semantic duplicate removal. The agent or producer must do it.
+Omit metadata to mark a reviewed location:
 
-## Submission procedure
-
-1. Require an `exact` code match.
-2. Show source, record counts, and destination.
-3. Get upload approval unless an approved CI policy covers it.
-4. Validate the local exchange file.
-5. Show input, invalid, duplicate, combined, and new counts.
-6. Submit once.
-7. Run `bevor analysis diff --staged --json`.
-8. Show additions, edits, and deletions.
-9. Get commit approval unless an approved CI policy covers it.
-10. Run `bevor analysis commit` once.
-11. Report committed counts and useful error text.
-
-For SARIF or JSON:
-
-```bash
-bevor agent submit results.sarif
-bevor analysis diff --staged --json
+```yaml
+tool: independent-review
+location:
+  strategy: node_id
+  node_id: REVIEWED_ENTRYPOINT_ID
 ```
 
-For a YAML directory, the pinned CLI has a known defect: it requires an unused positional file.
+Batch review marks with findings in one import. Count them separately from vulnerabilities. Never mark unreviewed code clean merely to improve coverage statistics.
 
-```bash
-bevor agent submit placeholder.json --dir findings/
-bevor analysis diff --staged --json
-```
+Direct flags have an all-or-nothing metadata contract. Supply all four metadata fields to record a finding. Partial metadata may be interpreted as a review mark, so prefer validated YAML for automation.
 
-Do not use the placeholder flow without first confirming the installed CLI still has this defect.
+## Duplicate control
+
+Compare the batch with existing and inherited findings by origin identity, root cause, semantic location, affected asset, and attack path. Titles alone are insufficient. Preserve discovery attribution and add corroboration to the existing finding rather than duplicating it. The server does not promise semantic deduplication.
+
+Bulk import creates findings; it does not replace edits to existing identities. Batch new additions, then use `bevor findings edit` for required updates to existing finding IDs. Serial edits can be necessary even when serial additions are avoidable. Never re-import an edited finding as a new record solely to reduce call count.
 
 ## Acknowledgement
 
-`bevor finding acknowledge FINDING_ID` toggles current state. It does not set an explicit desired value.
-
-Read the current finding, state the resulting value, and get clear approval before using the command.
+CLI 0.2.1 exposes explicit acknowledge and unacknowledge operations. These read the current state and invoke the underlying toggle only when needed. Use the requested desired state, confirm the target, and read back the result. Do not call a raw SDK toggle repeatedly.

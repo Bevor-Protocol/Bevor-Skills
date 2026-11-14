@@ -1,0 +1,4600 @@
+{
+  "cli_version": "0.2.1",
+  "commands": [
+    {
+      "help": "Bevor CLI — smart contract security analysis and code graph exploration.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "Suppress informational output; useful for scripting.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "quiet",
+          "nargs": 1,
+          "options": [
+            "--quiet"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Show the CLI version and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version",
+            "-v"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Install completion for the current shell.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "install_completion",
+          "nargs": 1,
+          "options": [
+            "--install-completion"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show completion for the current shell, to copy it or customize the installation.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "show_completion",
+          "nargs": 1,
+          "options": [
+            "--show-completion"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor"
+      ]
+    },
+    {
+      "help": "Manage analyses.\n\nAn analysis is a history of versions, like a git repository. HEAD is the version commands act on by default; pass --version to target another. Findings staged with `bevor findings` sit on HEAD until you commit them, which creates a new version. After a code change, `bevor sync` pushes it and adds it as a new version.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses"
+      ]
+    },
+    {
+      "help": "Create a version for the pushed code.\n\nWith an analysis selected, adds it as a new version on HEAD and moves HEAD to it. With none\nselected (or ``--new``), starts a new analysis and selects it. Nothing is run; use\n`bevor analyses run` for that. The working directory must match the last push; `bevor sync`\npushes and does this in one step.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "Start a new analysis even if one is selected.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "new",
+          "nargs": 1,
+          "options": [
+            "--new"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Name for a new analysis.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "name",
+          "nargs": 1,
+          "options": [
+            "--name"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Add the new version on top of this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": [
+            "surface",
+            "force",
+            "merge"
+          ],
+          "default": "surface",
+          "help": "What to do if this code already has a version: surface the candidates (default), force, or merge.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "collision",
+          "nargs": 1,
+          "options": [
+            "--collision"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Skip confirmation of action.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "yes",
+          "nargs": 1,
+          "options": [
+            "--yes"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Skip checks. Not recommended.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "force",
+          "nargs": 1,
+          "options": [
+            "--force"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "create"
+      ]
+    },
+    {
+      "help": "Delete a version, or the entire analysis.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "delete"
+      ]
+    },
+    {
+      "help": "Delete the selected analysis and all of its versions.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "delete",
+        "full"
+      ]
+    },
+    {
+      "help": "Delete a single leaf version. If it was HEAD, HEAD moves to its parent.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Version id to delete. Must be a leaf version.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "version"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "delete",
+        "version"
+      ]
+    },
+    {
+      "help": "Clear the selected analysis. Nothing is deleted; the pushed code stays selected.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "deselect"
+      ]
+    },
+    {
+      "help": "List the entrypoints of HEAD (or ``--version``) and their pipeline status.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Use this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "entrypoints"
+      ]
+    },
+    {
+      "help": "Copy another user's version into a new analysis you own, and select it.\n\nForks HEAD of the selected analysis, or ``--version``. You can't change analyses you don't own;\nforking lets you build on their findings. To branch your own analysis, move HEAD back with\n`bevor analyses set-head` and create a version from there.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Use this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "fork"
+      ]
+    },
+    {
+      "help": "Show HEAD of the selected analysis and its ancestors, back toward the root.\n\nEach version is fetched individually, so keep ``--limit`` small on long histories.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": 10,
+          "help": "Maximum number of versions to show.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "limit",
+          "nargs": 1,
+          "options": [
+            "--limit",
+            "-n"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "One line per version.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "oneline",
+          "nargs": 1,
+          "options": [
+            "--oneline"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "lineage"
+      ]
+    },
+    {
+      "help": "List analyses in the selected project (or ``--project``). The selected one is marked.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page number to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page",
+          "nargs": 1,
+          "options": [
+            "--page"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page size to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page_size",
+          "nargs": 1,
+          "options": [
+            "--page-size"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": [
+            "desc",
+            "asc"
+          ],
+          "default": null,
+          "help": "How to order results when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order",
+          "nargs": 1,
+          "options": [
+            "--order"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": [
+            "created_at",
+            "updated_at"
+          ],
+          "default": null,
+          "help": "What field to order results by when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order_by",
+          "nargs": 1,
+          "options": [
+            "--order-by"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Project ID (defaults to .bevor config).",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "project",
+          "nargs": 1,
+          "options": [
+            "--project"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Analysis creator to filter by",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "user",
+          "nargs": 1,
+          "options": [
+            "--user"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Analysis filter by owner only",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "is_owner",
+          "nargs": 1,
+          "options": [
+            "--is-owner"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "list"
+      ]
+    },
+    {
+      "help": "Write each entrypoint of HEAD that still needs processing to ``.bevor/analyses/<analysis>/<entrypoint>.raw.md``.\n\nEach file holds the entrypoint's source and its call chain, for an external agent to review. Only\nentrypoints that are queued or failed, and not carried over from a parent version, are written.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "materialize"
+      ]
+    },
+    {
+      "help": "Merge another analysis's HEAD (or ``--from-version``) into the selected analysis (or ``--to``).\n\nCreates a new version on the destination, moves its HEAD there, and selects it.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Analysis to merge from (its HEAD is used).",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "from_analysis",
+          "nargs": 1,
+          "options": [
+            "from_analysis"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Merge from this exact version instead of an analysis's HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "from_version",
+          "nargs": 1,
+          "options": [
+            "--from-version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Analysis to merge into (default: the selected analysis).",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "to_analysis",
+          "nargs": 1,
+          "options": [
+            "--to"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "merge"
+      ]
+    },
+    {
+      "help": "Run the security pipeline on the first-party entrypoints of HEAD (or ``--version``).\n\nPass ``--all`` to include entrypoints in dependencies too.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Use this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Include dependency entrypoints, not just first-party ones.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "all_entrypoints",
+          "nargs": 1,
+          "options": [
+            "--all"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Return immediately without waiting for the event stream to complete.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "no_wait",
+          "nargs": 1,
+          "options": [
+            "--no-wait"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Suppress intermediate output logs.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "silent",
+          "nargs": 1,
+          "options": [
+            "--silent"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "run"
+      ]
+    },
+    {
+      "help": "Select an analysis to work on, by id, with ``--recent``, or from a list.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Analysis id to select. Prompts with a list when omitted.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "analysis_id",
+          "nargs": 1,
+          "options": [
+            "analysis_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page number to query",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page",
+          "nargs": 1,
+          "options": [
+            "--page"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Max analyses to fetch.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page_size",
+          "nargs": 1,
+          "options": [
+            "--page-size"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Select your most recently used analysis.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "recent",
+          "nargs": 1,
+          "options": [
+            "--recent"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "select"
+      ]
+    },
+    {
+      "help": "Point HEAD of the selected analysis at a version. Commands act on HEAD by default.\n\n``@{1}`` or ``-`` undoes the last HEAD move made from this directory.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Version id, `@{n}` for where HEAD was n moves ago (see `bevor reflog`), or `-` for the previous HEAD.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "version_id",
+          "nargs": 1,
+          "options": [
+            "version_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "set-head"
+      ]
+    },
+    {
+      "help": "Show how findings changed (added, updated, removed, remediated, dismissed) at HEAD (or ``--version``).\n\nWith ``--project-wide``, list changes across the whole project instead.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page number to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page",
+          "nargs": 1,
+          "options": [
+            "--page"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page size to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page_size",
+          "nargs": 1,
+          "options": [
+            "--page-size"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": [
+            "desc",
+            "asc"
+          ],
+          "default": null,
+          "help": "How to order results when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order",
+          "nargs": 1,
+          "options": [
+            "--order"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": [
+            "created_at",
+            "updated_at"
+          ],
+          "default": null,
+          "help": "What field to order results by when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order_by",
+          "nargs": 1,
+          "options": [
+            "--order-by"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": [
+            "remediated",
+            "carried"
+          ],
+          "default": null,
+          "help": "Only show transitions with this kind (e.g. remediated, carried).",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "kind",
+          "nargs": 1,
+          "options": [
+            "--kind"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Use this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "List transitions across the whole project instead.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "project_wide",
+          "nargs": 1,
+          "options": [
+            "--project-wide"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "transitions"
+      ]
+    },
+    {
+      "help": "Show HEAD of the selected analysis (or of ``analysis_id``), or a specific ``--version``.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Analysis id. Defaults to the selected analysis.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "analysis_id",
+          "nargs": 1,
+          "options": [
+            "analysis_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "analyses",
+        "view"
+      ]
+    },
+    {
+      "help": "Manage analysis chats.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "chats"
+      ]
+    },
+    {
+      "help": "List chats in the selected project (or ``--project``).",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page number to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page",
+          "nargs": 1,
+          "options": [
+            "--page"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page size to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page_size",
+          "nargs": 1,
+          "options": [
+            "--page-size"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": [
+            "desc",
+            "asc"
+          ],
+          "default": null,
+          "help": "How to order results when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order",
+          "nargs": 1,
+          "options": [
+            "--order"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": [
+            "created_at",
+            "updated_at"
+          ],
+          "default": null,
+          "help": "What field to order results by when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order_by",
+          "nargs": 1,
+          "options": [
+            "--order-by"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "project to list chats for",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "project",
+          "nargs": 1,
+          "options": [
+            "--project"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "chats",
+        "list"
+      ]
+    },
+    {
+      "help": "Get chat messages for a chat.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Chat ID.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "chat_id",
+          "nargs": 1,
+          "options": [
+            "chat_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "chats",
+        "messages"
+      ]
+    },
+    {
+      "help": "Create a chat thread and open the streaming terminal session. The mode determines if you want\nto chat with just code, or with analysis + code. Either use your current configuration.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": [
+            "analysis",
+            "code"
+          ],
+          "default": null,
+          "help": "whether to create a chat with analysis or code",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "mode",
+          "nargs": 1,
+          "options": [
+            "mode"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "chats",
+        "new"
+      ]
+    },
+    {
+      "help": "Open the streaming session for an existing thread.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Thread id (`bevor chats list --json`, field id).",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "chat_id",
+          "nargs": 1,
+          "options": [
+            "chat_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "chats",
+        "resume"
+      ]
+    },
+    {
+      "help": "Get the details of a chat.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Chat ID.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "chat_id",
+          "nargs": 1,
+          "options": [
+            "chat_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "chats",
+        "view"
+      ]
+    },
+    {
+      "help": "Upload, list, and inspect code versions in the selected project.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes"
+      ]
+    },
+    {
+      "help": "List code versions in the selected project (or ``--project``). The selected one is marked.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page number to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page",
+          "nargs": 1,
+          "options": [
+            "--page"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page size to use for resource that supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page_size",
+          "nargs": 1,
+          "options": [
+            "--page-size"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": [
+            "desc",
+            "asc"
+          ],
+          "default": null,
+          "help": "How to order results when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order",
+          "nargs": 1,
+          "options": [
+            "--order"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": [
+            "created_at",
+            "updated_at"
+          ],
+          "default": null,
+          "help": "What field to order results by when a resource supports pagination",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order_by",
+          "nargs": 1,
+          "options": [
+            "--order-by"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Project to list for. Defaults to current configuration",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "project",
+          "nargs": 1,
+          "options": [
+            "--project"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Blockchain network to filter by",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "chain_id",
+          "nargs": 1,
+          "options": [
+            "--network"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Identifier (commit, hash, address) to filter by",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "identifier",
+          "nargs": 1,
+          "options": [
+            "--identifier"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": [
+            "queued",
+            "processing",
+            "failed",
+            "success"
+          ],
+          "default": null,
+          "help": "Code status to filter by",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "status",
+          "nargs": 1,
+          "options": [
+            "--status"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "list"
+      ]
+    },
+    {
+      "help": "Inspect the code graph.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "nodes"
+      ]
+    },
+    {
+      "help": "Get the call chain for a given node. Uses the selected code version, or ``--code``.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Node id",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "node_id",
+          "nargs": 1,
+          "options": [
+            "node_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code id to list for  (defaults to current configuration)",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "--code"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "nodes",
+        "call-chain"
+      ]
+    },
+    {
+      "help": "Show the source code of a node. Uses the selected code version, or ``--code``.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Node short id (or full wire id).",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "node_id",
+          "nargs": 1,
+          "options": [
+            "node_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code id to list for (defaults to current configuration)",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "--code"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "nodes",
+        "content"
+      ]
+    },
+    {
+      "help": "List the edges for a given node. Uses the selected code version, or ``--code``.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Node short id or full wire id.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "node_id",
+          "nargs": 1,
+          "options": [
+            "node_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code id to list for  (defaults to current configuration)",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "--code"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": [
+            "uses",
+            "typed_as",
+            "modified_by",
+            "calls",
+            "calls_external",
+            "reads",
+            "writes",
+            "inherits",
+            "overrides",
+            "emits",
+            "throws",
+            "defines",
+            "initializes",
+            "instantiates",
+            "accesses",
+            "has_constraint",
+            "has_attribute",
+            "implements",
+            "extends",
+            "has_ref_comment",
+            "has_condition"
+          ],
+          "default": null,
+          "help": "Edge direction filter: in, out.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "direction",
+          "nargs": 1,
+          "options": [
+            "--direction"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": [
+            "uses",
+            "typed_as",
+            "modified_by",
+            "calls",
+            "calls_external",
+            "reads",
+            "writes",
+            "inherits",
+            "overrides",
+            "emits",
+            "throws",
+            "defines",
+            "initializes",
+            "instantiates",
+            "accesses",
+            "has_constraint",
+            "has_attribute",
+            "implements",
+            "extends",
+            "has_ref_comment",
+            "has_condition"
+          ],
+          "default": null,
+          "help": "Edge type (e.g. calls, defines).",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "edge_type",
+          "nargs": 1,
+          "options": [
+            "--type"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "nodes",
+        "edges"
+      ]
+    },
+    {
+      "help": "Explore the graph from a node: get, source, optional call-chain (callable nodes only), and edges.\nUses the selected code version, or ``--code``.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Node to start from (short id or full id).",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "node_id",
+          "nargs": 1,
+          "options": [
+            "node_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code id to list for  (defaults to current configuration)",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "--code"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "nodes",
+        "interactive"
+      ]
+    },
+    {
+      "help": "List all nodes. Uses the selected code version, or ``--code``.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code id to list for (defaults to current configuration)",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "--code"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Only show auditable entry-point functions.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "entrypoints_only",
+          "nargs": 1,
+          "options": [
+            "--entrypoints"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Filter to nodes in this file.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "file_id",
+          "nargs": 1,
+          "options": [
+            "--file"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Filter to nodes under this directory prefix.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "no_deps",
+          "nargs": 1,
+          "options": [
+            "--no-deps"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Filter to nodes by name",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "name",
+          "nargs": 1,
+          "options": [
+            "--name"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Filter to nodes by type",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "node_type",
+          "nargs": 1,
+          "options": [
+            "--node-type"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "nodes",
+        "list"
+      ]
+    },
+    {
+      "help": "Get the details of a node. Uses the selected code version, or ``--code``.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Node short id (or full wire id).",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "node_id",
+          "nargs": 1,
+          "options": [
+            "node_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code id to list for (defaults to current configuration)",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "--code"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "nodes",
+        "view"
+      ]
+    },
+    {
+      "help": "Upload the working directory as a new code version and select it. Does nothing if it hasn't changed since the last push.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Source tree root (default: cwd).",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "path",
+          "nargs": 1,
+          "options": [
+            "--path"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "path"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Return immediately without waiting for the event stream to complete.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "no_wait",
+          "nargs": 1,
+          "options": [
+            "--no-wait"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Skip confirmation of action.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "yes",
+          "nargs": 1,
+          "options": [
+            "--yes"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "push"
+      ]
+    },
+    {
+      "help": "Select a code version in the selected project by id, or pick one from a list.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code version id to select. Prompts with a list when omitted.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "code_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "select"
+      ]
+    },
+    {
+      "help": "Print details for a code version, or the selected one.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Code version id. Defaults to the selected code version.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "code_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "codes",
+        "view"
+      ]
+    },
+    {
+      "help": "Stage, review, and search findings.\n\nadd, import, edit, and delete stage changes on HEAD of the selected analysis; `bevor analyses commit` turns them into a new version.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings"
+      ]
+    },
+    {
+      "help": "Mark a finding as acknowledged.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Finding id.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "finding_id",
+          "nargs": 1,
+          "options": [
+            "finding_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "acknowledge"
+      ]
+    },
+    {
+      "help": "Stage a new finding on HEAD of the selected analysis (or ``--version``).\n\nProvide input one of three ways:\n\n- ``--file``: a YAML file with exactly one finding mapping.\n- ``--interactive``: prompts for each field.\n- Flags directly, as described below.\n\nWhen passing flags, specify a location, which specifies the code node that the finding is associated with, using exactly one of:\n\n- ``--node`` and/or ``--location`` (a Bevor node id; ``--location`` alone\n  fans the finding out to every entrypoint that reaches it)\n- ``--uri`` plus one full pair of ``--start-line``/``--end-line``,\n  ``--char-offset``/``--char-length``, or ``--byte-offset``/``--byte-length``\n- ``--fqn``\n\nMetadata (``--type``, ``--level``, ``--name``, ``--explanation``) is all or\nnothing: provide all four to record a finding, or omit all four to mark the\nlocation as analyzed with no finding. ``--recommendation``, ``--poc``,\nand ``--tool`` are always optional.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Stage onto this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "YAML file containing exactly one finding mapping.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "file",
+          "nargs": 1,
+          "options": [
+            "--file"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "path"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Force interactive prompts.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "interactive",
+          "nargs": 1,
+          "options": [
+            "--interactive"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "type_",
+          "nargs": 1,
+          "options": [
+            "--type"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "default": null,
+          "help": "Severity of finding",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "level",
+          "nargs": 1,
+          "options": [
+            "--level"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "name",
+          "nargs": 1,
+          "options": [
+            "--name"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "explanation",
+          "nargs": 1,
+          "options": [
+            "--explanation"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "recommendation",
+          "nargs": 1,
+          "options": [
+            "--recommendation"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "poc",
+          "nargs": 1,
+          "options": [
+            "--poc"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "tool",
+          "nargs": 1,
+          "options": [
+            "--tool"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "node_id",
+          "nargs": 1,
+          "options": [
+            "--node"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "location_id",
+          "nargs": 1,
+          "options": [
+            "--location"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "uri",
+          "nargs": 1,
+          "options": [
+            "--uri"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "start_line",
+          "nargs": 1,
+          "options": [
+            "--start-line"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "start_column",
+          "nargs": 1,
+          "options": [
+            "--start-column"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "end_line",
+          "nargs": 1,
+          "options": [
+            "--end-line"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "end_column",
+          "nargs": 1,
+          "options": [
+            "--end-column"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "char_offset",
+          "nargs": 1,
+          "options": [
+            "--char-offset"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "char_length",
+          "nargs": 1,
+          "options": [
+            "--char-length"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "byte_offset",
+          "nargs": 1,
+          "options": [
+            "--byte-offset"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "byte_length",
+          "nargs": 1,
+          "options": [
+            "--byte-length"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "fully_qualified_name",
+          "nargs": 1,
+          "options": [
+            "--fqn"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "add"
+      ]
+    },
+    {
+      "help": "Stage the deletion of a finding. It's removed when you commit.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Finding id to delete.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "finding_id",
+          "nargs": 1,
+          "options": [
+            "finding_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "delete"
+      ]
+    },
+    {
+      "help": "Stage an edit to a finding, from a ``--file`` YAML or interactively (prefilled with its current values).",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Finding id to edit.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "finding_id",
+          "nargs": 1,
+          "options": [
+            "finding_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "YAML with one mapping: ``type``, ``level``, ``name``, ``explanation``; optional ``recommendation`` / ``poc``.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "file",
+          "nargs": 1,
+          "options": [
+            "--file",
+            "-f"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "path"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "edit"
+      ]
+    },
+    {
+      "help": "Stage findings from a file or directory onto HEAD of the selected analysis (or ``--version``).\n\n``source`` can be a ``.yaml``/``.yml`` file (one or more ``---``-separated findings), a directory\nof YAML files, a ``.sarif`` file, or a ``.json`` file with a top-level ``findings`` list.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "A .json file, .sarif file, .yaml/.yml file, or a directory of YAML files.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "source",
+          "nargs": 1,
+          "options": [
+            "source"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "path"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Stage onto this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "import"
+      ]
+    },
+    {
+      "help": "List findings on HEAD of the selected analysis, or search the whole project.\n\nBy default, lists every finding on HEAD (or ``--version``), including staged changes; this mode\nsupports ``--interactive`` and ``--sarif``. With ``--project-wide``, searches findings across the\nproject instead, with paging, sorting, and ownership filters. The filters panel works in both.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "Search findings across the whole project instead of HEAD. Results are paginated.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "project_wide",
+          "nargs": 1,
+          "options": [
+            "--project-wide"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "List findings on this version instead of HEAD.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "version",
+          "nargs": 1,
+          "options": [
+            "--version"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Browse findings and act on the focused row.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "interactive",
+          "nargs": 1,
+          "options": [
+            "--interactive"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Write the findings as SARIF to this path.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "sarif",
+          "nargs": 1,
+          "options": [
+            "--sarif"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "path"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Finding type.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "finding_type",
+          "nargs": 1,
+          "options": [
+            "--type"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": [
+            "critical",
+            "high",
+            "medium",
+            "low"
+          ],
+          "default": null,
+          "help": "Severity of finding",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "level",
+          "nargs": 1,
+          "options": [
+            "--level"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Only acknowledged findings.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "is_acknowledged",
+          "nargs": 1,
+          "options": [
+            "--acknowledged"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Page number.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page",
+          "nargs": 1,
+          "options": [
+            "--page"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Results per page.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "page_size",
+          "nargs": 1,
+          "options": [
+            "--page-size"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": [
+            "desc",
+            "asc"
+          ],
+          "default": null,
+          "help": "Sort direction.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order",
+          "nargs": 1,
+          "options": [
+            "--order"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": [
+            "created_at",
+            "updated_at",
+            "level"
+          ],
+          "default": null,
+          "help": "Field to sort by.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "order_by",
+          "nargs": 1,
+          "options": [
+            "--order-by"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Search this project instead of the selected one.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "project_id",
+          "nargs": 1,
+          "options": [
+            "--project"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Only findings in analyses you own.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "is_self",
+          "nargs": 1,
+          "options": [
+            "--self"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Only findings in analyses owned by this user.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "user_id",
+          "nargs": 1,
+          "options": [
+            "--user"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Only findings on this code version.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "code_id",
+          "nargs": 1,
+          "options": [
+            "--code"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Only findings in these analyses (comma-separated ids).",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "analysis_ids",
+          "nargs": 1,
+          "options": [
+            "--analyses"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Only findings you originally created.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "created_by_self",
+          "nargs": 1,
+          "options": [
+            "--created-by-self"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Only findings originally created by this user.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "created_by_user_id",
+          "nargs": 1,
+          "options": [
+            "--created-by"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "list"
+      ]
+    },
+    {
+      "help": "Remove the acknowledgement from a finding.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Finding id.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "finding_id",
+          "nargs": 1,
+          "options": [
+            "finding_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "unacknowledge"
+      ]
+    },
+    {
+      "help": "Discard the staged change to a finding. To discard everything staged, use `bevor analyses reset`.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Finding id to undo changes to.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "finding_id",
+          "nargs": 1,
+          "options": [
+            "finding_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "undo"
+      ]
+    },
+    {
+      "help": "Show a finding.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Finding ID.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "finding_id",
+          "nargs": 1,
+          "options": [
+            "finding_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "findings",
+        "view"
+      ]
+    },
+    {
+      "help": "Show root help text (alias for --help).",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "help"
+      ]
+    },
+    {
+      "help": "Link the current directory to a Bevor workspace and project.\n\nResets/creates the .bevor/config.json.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "link"
+      ]
+    },
+    {
+      "help": "Log in via browser.\n\nOpens your default browser to authenticate with Bevor. Your credentials\nare stored locally and used for subsequent commands.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "login"
+      ]
+    },
+    {
+      "help": "Remove stored credentials.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "logout"
+      ]
+    },
+    {
+      "help": "List, view, select, and create projects.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "projects"
+      ]
+    },
+    {
+      "help": "Create a project. Can pass arguments, or do so interactively.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "project name",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "name",
+          "nargs": 1,
+          "options": [
+            "--name"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "project description",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "description",
+          "nargs": 1,
+          "options": [
+            "--description"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": [
+            "standard",
+            "integration"
+          ],
+          "default": null,
+          "help": "project kind",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "kind",
+          "nargs": 1,
+          "options": [
+            "--kind"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "choice"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Skip confirmation of action.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "yes",
+          "nargs": 1,
+          "options": [
+            "--yes"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "projects",
+        "create"
+      ]
+    },
+    {
+      "help": "List projects in the selected workspace.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "projects",
+        "list"
+      ]
+    },
+    {
+      "help": "Select a project by id, or pick one from a list.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Project id to select. Prompts with a list when omitted.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "project_id",
+          "nargs": 1,
+          "options": [
+            "project_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "projects",
+        "select"
+      ]
+    },
+    {
+      "help": "Print details for a project in the selected workspace, or the selected project.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Project id. Defaults to the selected project.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "project_id",
+          "nargs": 1,
+          "options": [
+            "project_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "projects",
+        "view"
+      ]
+    },
+    {
+      "help": "Show recent analysis selections and HEAD moves made from this directory, newest first.\n\nEntries that switch to a different analysis (or clear the selection) say \"moving to\". With\n``--json``, each entry's ``kind`` is \"changed\" for those and \"moved\" for HEAD moves.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": 20,
+          "help": "Maximum number of entries to show.",
+          "is_flag": false,
+          "kind": "option",
+          "multiple": false,
+          "name": "limit",
+          "nargs": 1,
+          "options": [
+            "--limit",
+            "-n"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "int"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "reflog"
+      ]
+    },
+    {
+      "help": "List and revoke CLI sessions.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "sessions"
+      ]
+    },
+    {
+      "help": "List active CLI sessions.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "sessions",
+        "list"
+      ]
+    },
+    {
+      "help": "Revoke a CLI session by id.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "CLI session id to revoke (from `bevor sessions`).",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "token_id",
+          "nargs": 1,
+          "options": [
+            "token_id"
+          ],
+          "required": true,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "sessions",
+        "revoke"
+      ]
+    },
+    {
+      "help": "Show the selected workspace, project, code, and analysis, plus HEAD, staged changes, and pipeline progress.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "status"
+      ]
+    },
+    {
+      "help": "Push the working directory and add it to the selected analysis as a new version.\n\nUse this after any code change: saved edits, a branch switch, or a pull. Without a selected\nanalysis it only pushes; start one with `bevor analyses create`.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "Run the security pipeline on the new HEAD afterwards.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "run",
+          "nargs": 1,
+          "options": [
+            "--run"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "Skip confirmation of action.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "yes",
+          "nargs": 1,
+          "options": [
+            "--yes"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "sync"
+      ]
+    },
+    {
+      "help": "Upgrade bevor-cli to the latest release.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "upgrade"
+      ]
+    },
+    {
+      "help": "Show the currently authenticated user.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "whoami"
+      ]
+    },
+    {
+      "help": "List, view, and select workspaces.",
+      "kind": "group",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "workspaces"
+      ]
+    },
+    {
+      "help": "List workspaces you belong to.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "workspaces",
+        "list"
+      ]
+    },
+    {
+      "help": "Select a workspace by id, or pick one from a list.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Workspace id to select. Prompts with a list when omitted.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "workspace_id",
+          "nargs": 1,
+          "options": [
+            "workspace_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "workspaces",
+        "select"
+      ]
+    },
+    {
+      "help": "Print details for a workspace, or the selected one.",
+      "kind": "command",
+      "parameters": [
+        {
+          "choices": null,
+          "default": null,
+          "help": "Workspace id. Defaults to the selected workspace.",
+          "is_flag": false,
+          "kind": "argument",
+          "multiple": false,
+          "name": "workspace_id",
+          "nargs": 1,
+          "options": [
+            "workspace_id"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "str"
+        },
+        {
+          "choices": null,
+          "default": false,
+          "help": "JSON output",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "json_out",
+          "nargs": 1,
+          "options": [
+            "--json"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        },
+        {
+          "choices": null,
+          "default": null,
+          "help": "Show this message and exit.",
+          "is_flag": true,
+          "kind": "option",
+          "multiple": false,
+          "name": "help",
+          "nargs": 1,
+          "options": [
+            "--help"
+          ],
+          "required": false,
+          "secondary_options": [],
+          "type": "boolean"
+        }
+      ],
+      "path": [
+        "bevor",
+        "workspaces",
+        "view"
+      ]
+    }
+  ],
+  "schema_version": 1
+}

@@ -2,7 +2,7 @@
 
 Use this reference before a new security scan, security-agent run, change review, or context handoff.
 
-Reviewed against `bevor-cli 0.1.0` and `bevor-sdk 0.1.0` on 2026-09-02.
+Reviewed against released CLI/SDK 0.2.1 on 2026-11-14.
 
 ## Identity states
 
@@ -15,7 +15,7 @@ Apply an earlier finding without a version warning only for `exact`. For `relate
 
 ## Reuse procedure
 
-1. Read `bevor context --json`.
+1. Read `bevor status --json`.
 2. Identify the target commit and local source fingerprint.
 3. Compare the fingerprint with the selected code record.
 4. If needed, list code versions and match `version_fingerprint`.
@@ -28,24 +28,19 @@ Apply an earlier finding without a version warning only for `exact`. For `relate
 11. Select only scopes that require new work.
 12. Give downstream tools the security brief and selected source segments.
 
-The CLI cannot list recent analyses or filter team findings by code at the pinned version. Use:
-
-- `BevorClient.analyses.recent(...)` for recent analysis context.
-- `BevorClient.analyses.list(...)` for analysis search.
-- `BevorClient.findings.list({"code_id": code_id, ...})` for code-filtered findings.
-- `BevorClient.codes.transitions(...)` for code transitions.
+Use `bevor analyses list --json` for existing analyses and installed SDK types for queries beyond CLI filters. Verify code and parent version before applying a transition as proof of reuse. Hash mismatch after renames can misclassify surviving findings as remediated.
 
 ## Minimum context queries
 
 Use the smallest set that answers the question:
 
 ```bash
-bevor context --json
-bevor analysis get --json
-bevor analysis entrypoints --json
-bevor finding list --json
-bevor analysis diff --json
-bevor analysis remediations --json
+bevor status --json
+bevor analyses view --json
+bevor analyses entrypoints --json
+bevor findings list --json
+bevor analyses transitions --json
+bevor analyses lineage --json
 ```
 
 Do not run every command by default. For a single suspicious node, add only its metadata, content, relations, and findings.

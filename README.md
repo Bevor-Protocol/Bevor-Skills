@@ -17,7 +17,7 @@ The skill starts automatically for compatible cybersecurity targets, even when a
 
 ## Installation
 
-This skill requires the Bevor CLI and an authenticated account before any task work. The skill installs a missing CLI and starts browser login when needed. It continues only after `bevor whoami --json` succeeds and identifies the authenticated user. See [CLI installation, updates, and authentication](skills/bevor/SKILL.md#cli-installation-updates-and-authentication).
+Remote Bevor operations require the CLI and an authenticated account. Check setup once per session/environment and reuse it across audits. Documentation edits and offline contract tests need no login. See [CLI installation, updates, and authentication](skills/bevor/SKILL.md#cli-installation-updates-and-authentication).
 
 With a compatible skills CLI:
 
@@ -74,21 +74,36 @@ The entry file contains shared routing and safety rules. Agents load a focused r
 
 ## Compatibility
 
-The current CLI distribution is `bevor-cli 0.2.1`. The detailed command references remain pinned to the `bevor-cli 0.1.0` and `bevor-sdk 0.1.0` source snapshot. These Python packages require Python 3.13 or later, and the skill tells agents to prefer installed `0.2.1` help when the snapshot differs.
+The tested release is `bevor-cli 0.2.1`, requiring Python 3.13+. Command paths and options come from its executable Typer application. Source main can contain unreleased changes even when its version string matches PyPI.
+
+Finding writes apply immediately to the selected analysis version. The skill reviews local batches before submission and does not promise an unavailable staged-commit workflow.
 
 The current source implements the full native semantic graph for Solidity. Rust, Anchor, and Soroban graph types exist, but this skill does not claim full native DSL graph support until their parser and edge pipeline are released.
 
 ## Validation
 
 ```bash
+python3 -m pip install "bevor-cli==$(cat tests/fixtures/cli-release.txt)" -r tests/fixtures/cli-dependencies.txt
 python3 -m unittest discover -s tests -v
-python3 skills/bevor/scripts/check_cli_contract.py /path/to/bevorai-api
+python3 skills/bevor/scripts/check_cli_contract.py
 python3 skills/bevor/scripts/check_docs_links.py
 ```
 
+PR checks pin the CLI and Typer/Click metadata renderer versions. They validate the command contract, documented command/option examples, and YAML finding examples without authentication or network requests to Bevor. Link checks use public documentation only.
+
+A scheduled/manual workflow installs the latest public CLI and fails on contract drift. It uploads a generated update patch, installed dependency versions, and validation output. It has read-only repository permissions and no Bevor credentials. After installing the intended release, regenerate with:
+
+```bash
+python3 skills/bevor/scripts/check_cli_contract.py --update
+```
+
+Review workflow prose and parser behavior after regeneration. The checker verifies syntax and metadata; it does not execute remote commands or prove semantic accuracy. Run short staging tests before accepting behavioral changes.
+
+The vendored checker comes from `bevorai-api/scripts/codegen/python/cli_contract.py`, developed against source base `a4593aad271d911cd8868670fa568a745e7e050d`. Its SHA-256 is `535e18dc094123ad87af715557071879b552091c211248600a20ff522fa9000b`. Refresh it from the reviewed CLI release-reference artifact when that exporter changes.
+
 ## Documentation
 
-Use [docs.bevor.io/llms.txt](https://docs.bevor.io/llms.txt) as the current public documentation index.
+Use [www.bevor.io/docs](https://www.bevor.io/docs) for current public documentation.
 
 ## License
 

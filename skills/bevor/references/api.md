@@ -1,109 +1,23 @@
 # REST API and OpenAPI
 
-Use the raw API for non-Python services, generated clients, small HTTP integrations, or an endpoint that SDK 0.1.x does not expose.
+Reviewed 2026-11-14. Use the API for non-Python clients or operations not exposed by the released CLI.
 
-Compatibility basis: API and SDK source commit `591421f2963f6095d33521ff57ca3d60759333e3`, reviewed 2026-09-02.
+Use the current [API reference](https://www.bevor.io/docs/api-reference) and the selected deployment's OpenAPI. Verify the method, request body, authentication scope, and response type before coding. Historical staged-commit endpoints and old audit APIs are not a current contract.
 
-## Source selection
+## Authentication and scope
 
-1. Compare the deployed OpenAPI description with the intended environment.
-2. Prefer the split current specifications:
-   - `https://docs.bevor.io/api-reference/business.json`
-   - `https://docs.bevor.io/api-reference/graph.json`
-   - `https://docs.bevor.io/api-reference/security.json`
-3. Use `https://api.bevor.io` as the production base URL unless the user selects another environment.
-4. Treat older `/v1/audits` examples as obsolete.
+Use bearer authentication from a protected secret store. Keep credentials out of browser clients, source, logs, prompts, and command arguments. Production defaults to `https://api.bevor.io`; staging is `https://staging.api.bevor.io`.
 
-The public narrative pages can contain preview warnings that differ from the deployed API and released SDK. For exact endpoints, use the matching OpenAPI or release source.
+Workspace/project navigation can require a user session, while API keys are project-scoped. Do not assume these credential types are interchangeable.
 
-## Authentication
+Distinguish workspace, project, code, analysis, version, node, and finding IDs. A Git SHA is source metadata, not a Bevor identifier.
 
-Use:
+## Writes and retry
 
-```http
-Authorization: Bearer BEVOR_API_KEY
-```
+Review a local finding batch before submission. Current finding operations change the selected analysis version immediately. Re-read remote state after a timeout before retrying create, upload, import, merge, or pipeline start.
 
-Read the credential from a secret store or environment variable. Do not place it in source, client-side code, logs, prompts, or examples with a real value.
+Use bounded retries for reads and documented idempotent operations. Preserve pagination, request IDs, and error codes. Never resubmit accepted records blindly.
 
-Uploads and streams can use single-use keys returned by an authenticated API operation. Do not replace them with the bearer token in a URL.
+## Integration limits
 
-## Resource identity
-
-Keep these identifiers separate:
-
-- Team ID: access and ownership boundary.
-- Project ID: container for code and security history.
-- Code ID: one Bevor code version with a source fingerprint.
-- Analysis ID: one analysis lineage or container.
-- Analysis-version ID: one point in that lineage.
-- Analysis HEAD: the selected current version of an analysis.
-- Node ID: semantic code location within a code version.
-- Finding ID: one finding identity across its history.
-
-A Git commit SHA is metadata for source identity. It is not a Bevor ID.
-
-## API areas
-
-| Area | Main resources |
-| --- | --- |
-| Business | Projects and team activity. Some team operations require a session rather than API key. |
-| Graph | Code versions, uploads, files, nodes, edges, call chains, transitions, and code chats. |
-| Security | Analyses, analysis versions, entrypoints, findings, diffs, commits, retries, remediations, summaries, and analysis chats. |
-| Chat | Synchronous responses and streamed sessions tied to code or analysis versions. |
-
-Use the endpoint descriptions in [docs-map.md](docs-map.md) instead of guessing paths or request bodies.
-
-## Pages and streams
-
-Paginated responses contain a result page and page metadata. Preserve server page size and ordering semantics from OpenAPI.
-
-For event streams:
-
-- Use the stream-token endpoint first.
-- Reconnect only when the endpoint documents safe resumption.
-- Inspect final resource state after an interrupted stream.
-- Do not repeat the operation only because the client missed the final event.
-
-## Errors and retries
-
-Expected structured errors use:
-
-```json
-{
-  "message": "Human-readable description",
-  "code": "error.code"
-}
-```
-
-Capture the response request ID for support and diagnostics. Never include a credential in a support bundle.
-
-Retry reads and documented idempotent operations with bounded exponential backoff. Before retrying a create, upload, analysis start, import, or commit:
-
-1. Inspect the target resource.
-2. Check whether the first request succeeded.
-3. Use an idempotency or repeat key when the endpoint supports it.
-4. Do not resubmit accepted findings.
-
-Do not assume a generic HTTP status is safe to retry. Use the endpoint contract and structured error code.
-
-## Staged findings
-
-Adding, editing, or deleting findings changes the staged view of an analysis version. It does not complete the version commit.
-
-The safe sequence is:
-
-1. Resolve an exact code and analysis version.
-2. Read committed and staged findings.
-3. Deduplicate.
-4. Submit one staged change set.
-5. Read the staged diff.
-6. Show it to the user.
-7. Get commit approval.
-8. Commit once.
-
-## Current integration gap
-
-The pinned public contract does not clearly define a record-only external security run with a stable CI repeat key. Do not fake this by starting Bevor-managed analysis.
-
-For a CI implementation, confirm the deployed contract first. If the operation is absent, implement or document the API and SDK contract before promising record-only mode.
+Confirm whether the deployment supports a record-only external security run and a stable repeat key before implementing that workflow. Do not substitute a paid pipeline run for recording external results.

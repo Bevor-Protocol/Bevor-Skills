@@ -1,119 +1,100 @@
 # CLI workflows and state
 
-Use this reference for authentication, repository linking, identity changes, and safe command composition. Read [cli-command-tree.md](cli-command-tree.md) for exact flags.
+Reviewed against released CLI 0.2.1 on 2026-11-14. The command tree is generated from the installed Typer application.
 
-Compatibility: `bevor-cli 0.1.0`, source commit `591421f2963f6095d33521ff57ca3d60759333e3`, reviewed 2026-09-02.
+## Identity and local state
 
-## Resource hierarchy
+Workspace → project → code versions and analyses → analysis versions (one HEAD) → findings and entrypoints.
 
-```text
-team
-└── project
-    └── code version (code ID and source fingerprint)
-        └── analysis container (analysis ID)
-            └── analysis version (version ID; one selected HEAD)
-                ├── entrypoints
-                ├── committed and staged findings
-                ├── remediations
-                └── analysis chats
-```
+A code ID, analysis ID, and analysis-version ID are different identifiers. Local selection lives in `.bevor/config.json`. Changing workspace/project clears downstream selections. Selecting code preserves the analysis so a child can use its current HEAD.
 
-Do not substitute one ID type for another. A Git commit SHA can describe a source revision, but it is not a Bevor code ID or analysis-version ID.
+## Connect an existing Dashboard project
 
-## Read state without changing it
-
-Run:
+Use direct IDs to avoid interactive selection in agents and CI:
 
 ```bash
-bevor context --json
-bevor project get --json
-bevor code get --json
-bevor analysis get --json
+bevor workspaces list --json
+bevor workspaces select WORKSPACE_ID
+bevor projects list --json
+bevor projects select PROJECT_ID
+bevor status --json
 ```
 
-Use only the commands needed for the question. `context --json` is the normal first query.
+For human interactive setup, `bevor link` chooses a workspace and project. It resets local linkage. It does not upload source.
 
-Do not use `bevor init`, `bevor code sync`, or `bevor agent setup` as status commands. They can change local or remote state.
-
-## Link or change context
-
-1. Confirm authentication with `bevor whoami --json`.
-2. Use `bevor init` only when the user wants to create or replace the link.
-3. Prefer direct IDs for automation:
+Create a project only when requested. All fields below avoid prompts:
 
 ```bash
-bevor team select --team TEAM_ID
-bevor project select --project PROJECT_ID
-bevor code use CODE_ID
-bevor analysis use ANALYSIS_ID
+bevor projects create --name "Audit project" --description "Security review" --kind standard --yes
+bevor status --json
 ```
 
-4. Re-read `bevor context --json` after a selection change.
+Project creation selects the new project. The command has no JSON-output flag. Read IDs from status afterward.
 
-Changing the team clears the selected project, code, and analysis. Changing code does not prove that the selected analysis matches it.
-
-## Create new analysis work
-
-Before upload or paid work:
-
-1. Resolve the local source fingerprint with the SDK helper when possible.
-2. Search existing code versions for the same fingerprint.
-3. Reuse an exact code version.
-4. If upload is needed, show the target path, exclusions, team, and project.
-5. Get transfer approval.
-6. Use `bevor code push --path PATH` or the SDK.
-7. Show an available cost estimate before `bevor analysis run`.
-8. Get approval for paid work.
-
-Create an analysis without bypassing sync unless the mismatch is intentional:
+Selecting a project clears any previously selected analysis. To resume existing work in this project:
 
 ```bash
-bevor analysis create --name NAME --json
-bevor analysis get --json
+bevor analyses list --json
+bevor analyses select ANALYSIS_ID
+bevor status --json
 ```
 
-Use `--force` only when the user accepts the stale-source risk.
+Verify the analysis and HEAD before importing findings. Match/select the target code separately and check local source identity.
 
-## Continue an analysis lineage
+## First code and analysis
 
-Use a child version when new code should inherit applicable work from the current lineage:
+Resolve matching existing versions first:
 
-1. Select the new exact code version.
-2. Confirm the parent analysis version.
-3. Create the child.
-4. Inspect entrypoints and the version difference.
-5. Separate inherited scope from scope that needs new work.
+```bash
+bevor codes list --json
+bevor codes select CODE_ID
+bevor status --json
+```
 
-At the pinned CLI version, verify non-head `--version` behavior before using it with `child`, `diff`, or `entrypoints`. Use the SDK version resources when exact non-head selection matters.
+Verify `working_tree.matches_code` and `code.status`. A failed code upload can still match the fingerprint. Do not create analysis work until code processing succeeds.
 
-Use `fork` to create an owned analysis from a version. Use `merge` only after confirming the source and destination analysis IDs. Both change remote history.
+When an authorized source upload is needed, run from the target root:
 
-## Agent-safe output
+```bash
+bevor codes push --yes
+bevor analyses create --new --name "Audit" --yes --json
+bevor status --json
+```
 
-- Use `--json` when another command, script, or agent will read the result.
-- Use `--quiet` only when it keeps all required result data.
-- Avoid interactive commands in automation.
-- Do not paste full JSON into chat. Extract identity, counts, relevant IDs, and small evidence fields.
-- Keep full results in a local artifact when the user needs them.
+Keep finding files, reports, and temporary output outside the source tree before fingerprinting. Source uploads can include UTF-8 files beyond Solidity.
+
+An existing exact version can cause a collision result even with a successful exit code. Inspect the response type and returned candidates. Select the intended existing analysis; use `--collision force` only for an intentionally separate lineage. Do not blindly retry.
+
+Creating an analysis does not run the paid pipeline. `bevor analyses run` is separate and requires authorization for that work.
+
+## Continue a lineage after a branch change
+
+Record the current analysis and parent HEAD before selecting the new exact code:
+
+```bash
+bevor analyses view --json
+bevor codes select NEW_CODE_ID
+bevor status --json
+bevor analyses create --yes --json
+bevor analyses lineage --json
+bevor analyses transitions --json
+bevor analyses entrypoints --json
+bevor findings list --json
+```
+
+With an analysis selected, create adds a child version and moves HEAD. Do not pass `--new`, which starts another analysis. Confirm the returned child has the expected parent and code.
+
+If code is new, replace code selection with an authorized `bevor codes push --yes`. `bevor sync --yes` combines source upload and child creation, so use it only when both are intended.
+
+Review carried findings and purported remediations before starting new audit work. Rename or hash mismatch can hide surviving findings. Check node ownership as well as function bodies.
+
+To read a specific version, use supported commands' `--version VERSION_ID`. To move shared HEAD, use `bevor analyses set-head VERSION_ID` only when that change is intended. Fork and merge also change remote history.
 
 ## Failure handling
 
-- Authentication failure: use `whoami`; do not ask the user to paste a token.
-- Missing `.bevor`: explain that no local link exists. Do not initialize without authorization.
-- Code mismatch: label context `stale`; do not apply prior findings as exact.
-- Unsupported command: compare the installed version once and use the SDK or API fallback.
-- Stream interruption: inspect current analysis state before retrying.
-- Duplicate create collision: inspect the returned candidates; do not repeat the create call blindly.
-- Partial bulk import: report accepted and rejected counts and error text. Do not resubmit accepted records.
-
-## Sensitive commands
-
-Get clear approval immediately before these operations unless an approved CI policy covers the exact action:
-
-- `code push` or a `code sync` that uploads.
-- `analysis run`, `commit`, `merge`, or either delete command.
-- `finding acknowledge` or staged deletion.
-- `agent setup` or `agent submit`.
-- Session revocation.
-
-Use noninteractive confirmation flags only after approval for the exact operation and target.
+- On an authentication error, check the account once and reauthorize if needed.
+- On unknown command/option, consult that command's help once. Do not repeat full setup.
+- On rate limits, use bounded backoff and sequential requests. Stop repeated failures with evidence.
+- On a stream timeout or ambiguous write, inspect remote state before retrying.
+- On import failure, read accepted records before resubmitting.
+- On JSON serialization failure, use supported text output or a narrow released-SDK query. Report the defect.

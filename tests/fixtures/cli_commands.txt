@@ -1,56 +1,67 @@
-# bevor-cli 0.1.0 command snapshot, source commit 591421f2963f6095d33521ff57ca3d60759333e3
+# Generated from the installed CLI; do not edit.
+bevor analyses
+bevor analyses create
+bevor analyses delete
+bevor analyses delete full
+bevor analyses delete version
+bevor analyses deselect
+bevor analyses entrypoints
+bevor analyses fork
+bevor analyses lineage
+bevor analyses list
+bevor analyses materialize
+bevor analyses merge
+bevor analyses run
+bevor analyses select
+bevor analyses set-head
+bevor analyses transitions
+bevor analyses view
+bevor chats
+bevor chats list
+bevor chats messages
+bevor chats new
+bevor chats resume
+bevor chats view
+bevor codes
+bevor codes list
+bevor codes nodes
+bevor codes nodes call-chain
+bevor codes nodes content
+bevor codes nodes edges
+bevor codes nodes interactive
+bevor codes nodes list
+bevor codes nodes view
+bevor codes push
+bevor codes select
+bevor codes view
+bevor findings
+bevor findings acknowledge
+bevor findings add
+bevor findings delete
+bevor findings edit
+bevor findings import
+bevor findings list
+bevor findings unacknowledge
+bevor findings undo
+bevor findings view
 bevor help
+bevor link
 bevor login
 bevor logout
-bevor whoami
-bevor init
-bevor context
+bevor projects
+bevor projects create
+bevor projects list
+bevor projects select
+bevor projects view
+bevor reflog
+bevor sessions
 bevor sessions list
 bevor sessions revoke
-bevor team select
-bevor team list
-bevor project select
-bevor project list
-bevor project create
-bevor project get
-bevor code use
-bevor code list
-bevor code get
-bevor code push
-bevor code sync
-bevor code node list
-bevor code node get
-bevor code node content
-bevor code node edges
-bevor code node call-chain
-bevor code node interactive
-bevor analysis create
-bevor analysis use
-bevor analysis set
-bevor analysis get
-bevor analysis run
-bevor analysis retry
-bevor analysis diff
-bevor analysis commit
-bevor analysis child
-bevor analysis fork
-bevor analysis merge
-bevor analysis entrypoints
-bevor analysis remediations
-bevor analysis delete full
-bevor analysis delete version
-bevor finding list
-bevor finding get
-bevor finding add
-bevor finding edit
-bevor finding delete
-bevor finding revert
-bevor finding acknowledge
-bevor agent setup
-bevor agent materialize
-bevor agent submit
-bevor chat list
-bevor chat get
-bevor chat messages
-bevor chat new
-bevor chat resume
+bevor status
+bevor sync
+bevor upgrade
+bevor whoami
+bevor workspaces
+bevor workspaces list
+bevor workspaces select
+bevor workspaces view

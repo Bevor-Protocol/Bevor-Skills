@@ -14,8 +14,8 @@
   {
     "name": "SARIF submission",
     "request": "Import this scanner SARIF.",
-    "must": ["validate source", "deduplicate", "stage once", "show staged diff", "ask before commit"],
-    "must_not": ["semantic duplicates", "automatic commit without policy"]
+    "must": ["validate source", "deduplicate", "review local batch", "import once within authorization", "read back accepted results"],
+    "must_not": ["semantic duplicates", "promise a separate CLI commit gate"]
   },
   {
     "name": "existing CI job",
@@ -50,8 +50,8 @@
   {
     "name": "acknowledgement",
     "request": "Acknowledge this finding.",
-    "must": ["read current state", "state resulting value", "get approval"],
-    "must_not": ["assume toggle sets true"]
+    "must": ["read current state", "state resulting value", "apply requested acknowledge or unacknowledge"],
+    "must_not": ["repeat raw toggle blindly"]
   },
   {
     "name": "savings",

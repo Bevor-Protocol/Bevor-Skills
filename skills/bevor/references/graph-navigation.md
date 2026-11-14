@@ -18,16 +18,16 @@ SARIF or generic finding import can still support results from other ecosystems.
 
 ## Start narrow
 
-1. Run `bevor context --json` and record the exact code ID.
+1. Run `bevor status --json` and record the exact code ID.
 2. Find a node with a narrow query:
 
 ```bash
-bevor code node list --name NAME --json
-bevor code node list --file PATH --node-type TYPE --json
-bevor code node list --entrypoints --no-deps --json
+bevor codes nodes list --name NAME --json
+bevor codes nodes list --file FILE_ID --node-type TYPE --json
+bevor codes nodes list --entrypoints --no-deps --json
 ```
 
-3. Use `node get` for metadata.
+3. Use node view for metadata. The file filter takes a Bevor file ID, not a source path.
 4. Use `node content` only for the necessary source segment.
 5. Follow one relation type and direction at a time.
 6. Use `call-chain` for callable behavior.
@@ -35,6 +35,8 @@ bevor code node list --entrypoints --no-deps --json
 8. Stop when more nodes no longer affect the question or attack path.
 
 Do not load the whole graph into model context. Use the SDK for repeated traversal and keep raw data in memory or a file.
+
+CLI 0.2.1 has a known direction-option enum mismatch and JSON serialization defects on node view and call-chain. Avoid repeated failing calls: omit the direction filter, filter returned edges locally, or use matching SDK methods. Read text output when JSON fails. Verify source/destination IDs when applying local direction filters.
 
 ## Edge meanings
 

@@ -22,5 +22,5 @@ BEVOR_SKILL_PRD.md     # Product requirements and source decisions
 - Give each generated reference a version or review date.
 - Do not fabricate commands, endpoints, product support, savings, or examples.
 - Do not include secrets, API keys, personal data, or blanket remote approval.
-- Preserve staged review before finding commits.
+- Preserve review before remote finding writes. On CLI 0.2.1, review the local batch before import because writes apply immediately and no separate commit command exists.
 - Run the skill tests and CLI contract check after relevant changes.

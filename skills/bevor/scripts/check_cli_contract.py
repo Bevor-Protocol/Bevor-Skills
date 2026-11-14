@@ -1,101 +1,76 @@
 #!/usr/bin/env python3
-"""Compare the pinned Bevor CLI command snapshot with generated release docs."""
-
+"""Refresh or check this skill's release contract without making remote requests."""
 from __future__ import annotations
 
 import argparse
-import re
-import sys
+import importlib.metadata
+import json
 from pathlib import Path
 
+from cli_contract import check_documents, export_contract, serialized
 
-GROUP_FILES = ("project", "team", "sessions", "finding", "agent", "chat")
-PINNED_VERSION = "0.1.0"
-
-
-def headings(path: Path, level: int) -> list[str]:
-    pattern = re.compile(rf"^{'#' * level} `([^`]+)`$")
-    return [match.group(1) for line in path.read_text().splitlines() if (match := pattern.match(line))]
-
-
-def source_commands(api_root: Path) -> set[str]:
-    docs = api_root / "packages" / "cli" / "docs"
-    if not docs.is_dir():
-        raise ValueError(f"CLI generated docs not found: {docs}")
-
-    commands = {f"bevor {name}" for name in headings(docs / "root.mdx", 2)}
-
-    for group in GROUP_FILES:
-        commands.update(f"bevor {group} {name}" for name in headings(docs / f"{group}.mdx", 2))
-
-    code_top = headings(docs / "code.mdx", 2)
-    commands.update(f"bevor code {name}" for name in code_top if name != "node")
-    commands.update(f"bevor code node {name}" for name in headings(docs / "code.mdx", 3))
-
-    analysis_top = headings(docs / "analysis.mdx", 2)
-    commands.update(f"bevor analysis {name}" for name in analysis_top if name != "delete")
-    commands.update(
-        f"bevor analysis delete {name}" for name in headings(docs / "analysis.mdx", 3)
-    )
-    return commands
+ROOT = Path(__file__).resolve().parents[3]
+SKILL = ROOT / "skills" / "bevor"
+SNAPSHOT = ROOT / "tests" / "fixtures" / "cli_contract.json"
+COMMANDS = ROOT / "tests" / "fixtures" / "cli_commands.txt"
+RELEASE = ROOT / "tests" / "fixtures" / "cli-release.txt"
+DEPENDENCIES = ROOT / "tests" / "fixtures" / "cli-dependencies.txt"
+REFERENCE = SKILL / "references" / "cli-command-tree.md"
 
 
-def pinned_commands(repo_root: Path) -> set[str]:
-    fixture = repo_root / "tests" / "fixtures" / "cli_commands.txt"
-    return {
-        line.strip()
-        for line in fixture.read_text().splitlines()
-        if line.strip() and not line.lstrip().startswith("#")
-    }
-
-
-def project_version(path: Path) -> str:
-    match = re.search(r'^version = "([^"]+)"$', path.read_text(), re.MULTILINE)
-    if not match:
-        raise ValueError(f"Version not found in {path}")
-    return match.group(1)
+def render(contract: dict) -> tuple[str, str]:
+    rows = [
+        "# CLI command tree", "",
+        f"Generated from installed bevor-cli {contract['cli_version']} (released package).",
+        "Regenerate with `python skills/bevor/scripts/check_cli_contract.py --update`.",
+        "No authentication or command callback runs during generation.", "",
+        "This is syntax metadata, not a guarantee of remote behavior. See the workflow references for write boundaries and verified recipes.",
+        "The release help can still say staged even though the finding writes apply immediately.", "",
+        "| Command | Available options |", "| --- | --- |",
+    ]
+    names = []
+    for command in contract["commands"]:
+        name = " ".join(command["path"])
+        if name == "bevor":
+            continue
+        names.append(name)
+        flags = [flag for param in command["parameters"] if param["kind"] == "option"
+                 for flag in param["options"] + param["secondary_options"] if flag != "--help"]
+        rows.append("| `" + name + "` | " + ", ".join("`" + f + "`" for f in flags) + " |")
+    return "\n".join(rows) + "\n", "# Generated from the installed CLI; do not edit.\n" + "\n".join(names) + "\n"
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("api_root", type=Path, help="Path to the bevorai-api repository")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--update", action="store_true", help="Regenerate release snapshot and command reference")
+    parser.add_argument("--docs-only", action="store_true", help="Validate examples against a newer installed release")
     args = parser.parse_args()
-
-    repo_root = Path(__file__).resolve().parents[3]
-    api_root = args.api_root.resolve()
-
-    cli_version = project_version(api_root / "packages" / "cli" / "pyproject.toml")
-    sdk_version = project_version(api_root / "packages" / "bevor-sdk" / "pyproject.toml")
-    if cli_version != PINNED_VERSION or sdk_version != PINNED_VERSION:
-        print(
-            f"version drift: cli={cli_version}, sdk={sdk_version}, expected={PINNED_VERSION}",
-            file=sys.stderr,
+    contract = export_contract()
+    reference, names = render(contract)
+    if args.update:
+        SNAPSHOT.write_text(serialized(contract))
+        REFERENCE.write_text(reference)
+        COMMANDS.write_text(names)
+        RELEASE.write_text(contract["cli_version"] + "\n")
+        DEPENDENCIES.write_text(
+            "# Metadata renderer versions used for this contract.\n"
+            + "".join(f"{name}=={importlib.metadata.version(name)}\n" for name in ("typer", "click"))
         )
-        return 1
-
-    expected = pinned_commands(repo_root)
-    actual = source_commands(api_root)
-    missing = sorted(actual - expected)
-    removed = sorted(expected - actual)
-    if missing or removed:
-        if missing:
-            print("new commands not in snapshot:", *missing, sep="\n  ", file=sys.stderr)
-        if removed:
-            print("snapshot commands absent from source:", *removed, sep="\n  ", file=sys.stderr)
-        return 1
-
-    reference = (repo_root / "skills" / "bevor" / "references" / "cli-command-tree.md").read_text()
-    undocumented = sorted(
-        command
-        for command in expected
-        if not re.search(rf"`{re.escape(command)}(?:`|[ ])", reference)
-    )
-    if undocumented:
-        print("commands absent from reference:", *undocumented, sep="\n  ", file=sys.stderr)
-        return 1
-
-    print(f"CLI contract matches {len(actual)} commands at version {PINNED_VERSION}.")
-    return 0
+    elif not args.docs_only:
+        if RELEASE.read_text().strip() != contract["cli_version"]:
+            print("Installed CLI differs from the reviewed release pin.")
+            return 1
+        if SNAPSHOT.read_text() != serialized(contract):
+            print("CLI contract drift: install the pinned release, or review and regenerate with --update.")
+            return 1
+        if REFERENCE.read_text() != reference or COMMANDS.read_text() != names:
+            print("Generated command reference differs from installed source. Regenerate with --update.")
+            return 1
+    errors, count = check_documents([SKILL / "SKILL.md", SKILL / "references"], contract)
+    for error in errors:
+        print(error)
+    print(f"Validated {count} snippets against CLI {contract['cli_version']}; {len(errors)} errors")
+    return int(bool(errors) or not count)
 
 
 if __name__ == "__main__":

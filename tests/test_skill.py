@@ -82,7 +82,6 @@ class SkillStructureTests(unittest.TestCase):
     def test_old_audit_only_contract_is_removed(self) -> None:
         text = SKILL_MD.read_text()
         self.assertNotIn("graph only", text.lower())
-        self.assertNotIn("bevor codes", text)
         self.assertNotIn("pre-approved", text)
         self.assertNotIn("ABSOLUTELY FORBIDDEN", text)
 
@@ -93,7 +92,7 @@ class SkillStructureTests(unittest.TestCase):
         self.assertIn("https://bevor.io/install.sh", text)
         self.assertIn("bevor --version", text)
         self.assertIn("bevor upgrade", text)
-        self.assertIn("python3 -m pip index versions bevor-cli", text)
+        self.assertIn("Check once per session", text)
 
 
 class ContractTests(unittest.TestCase):
@@ -110,7 +109,7 @@ class ContractTests(unittest.TestCase):
             if not re.search(rf"`{re.escape(command)}(?:`|[ ])", reference)
         ]
         self.assertEqual([], missing)
-        self.assertNotIn("bevor analysis list", commands)
+        self.assertIn("bevor analyses list", commands)
 
     def test_remote_boundaries_are_explicit(self) -> None:
         text = SKILL_MD.read_text()

@@ -30,7 +30,10 @@ def main() -> int:
     args = parser.parse_args()
 
     docs_map = Path(__file__).resolve().parents[1] / "references" / "docs-map.md"
-    urls = sorted(set(re.findall(r"https://docs\.bevor\.io[^)`\s]+", docs_map.read_text())))
+    urls = sorted(set(re.findall(r"https://(?:www\.)?bevor\.io/docs[^)`\s]*", docs_map.read_text())))
+    if not urls:
+        print("No documentation links found.", file=sys.stderr)
+        return 1
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         results = list(pool.map(lambda url: check(url, args.timeout), urls))
