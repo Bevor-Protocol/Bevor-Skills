@@ -9,7 +9,6 @@ This repository publishes the broad Bevor Agent Skill.
 ```text
 skills/bevor/          # Entry: SKILL.md; focused guidance under references/
 tests/                 # Selection and behavior fixtures plus static tests
-BEVOR_SKILL_PRD.md     # Product requirements and source decisions
 ```
 
 ## Rules
