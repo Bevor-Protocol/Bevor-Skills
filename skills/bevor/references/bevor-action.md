@@ -26,7 +26,7 @@ Do not recommend the current Action as the default until these issues are fixed:
 - It cannot import SARIF from an earlier CI step.
 - It uploads source on every run instead of reusing an exact fingerprint.
 - It uses vendored `bevor_graph_sdk` and `bevor_security_sdk` preview packages.
-- Its Dashboard link is hard-coded to the staging application.
+- Its Dashboard link is hard-coded instead of using the configured app URL.
 - Its `diff` mode matches changed file paths, not semantic blast radius.
 - It can fall back from `diff` to full analysis.
 - It does not use a stable retry key.
@@ -56,7 +56,7 @@ It must:
 - Use a stable repeat key.
 - Report input, invalid, duplicate, combined, new, staged, and committed counts.
 - Output code, analysis, analysis-version, and Dashboard identifiers.
-- Use the selected environment for API and Dashboard links.
+- Use `https://api.bevor.io` and `https://app.bevor.io` for public API and Dashboard links.
 - Name changed-file scope accurately. Do not call it semantic impact.
 - Document permissions, secrets, forks, retries, and commit policy.
 
@@ -71,6 +71,6 @@ Before the skill recommends the Action:
 5. Add retry and duplicate fixtures.
 6. Add fork tests that prove secrets are unavailable.
 7. Add a SARIF-before-gate test.
-8. Remove the old vendored clients and staging URL.
+8. Remove the old vendored clients and use the configured production app URL.
 
 Do not fabricate an Action version or mode that is not released.

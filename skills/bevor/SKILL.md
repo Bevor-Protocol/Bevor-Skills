@@ -17,22 +17,50 @@ Bevor supports Solidity, Anchor Rust, and GenLayer Intelligent Python Contracts,
 
 ## CLI installation, updates, and authentication
 
-Use the environment the user selected before the first authenticated call. For staging, set both variables in the shell that runs the CLI:
+Public workflows use the production API and Dashboard. Set both variables in the shell that runs the CLI before authenticated calls:
 
 ```bash
-export BEVOR_API_URL=https://staging.api.bevor.io
-export BEVOR_APP_URL=https://staging.app.bevor.io
+export BEVOR_API_URL=https://api.bevor.io
+export BEVOR_APP_URL=https://app.bevor.io
 ```
 
-Check once per session and API environment, then reuse successful setup across branch audits:
+The tested release is [bevor-cli 0.2.1](https://pypi.org/project/bevor-cli/), requiring Python 3.13+. Check once per session, then reuse successful setup across branch audits:
 
 ```bash
+command -v bevor && bevor --version
+```
+
+If `bevor` is missing on macOS/Linux, check the user tool directories before reinstalling:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+if command -v uv >/dev/null 2>&1; then
+  bevor_cli_bin="$(uv tool dir --bin)" && export PATH="$bevor_cli_bin:$PATH"
+fi
 command -v bevor
-bevor --version
+```
+
+If it is still missing, run the [official installer](https://bevor.io/install.sh) once:
+
+```bash
+curl -LsSf https://bevor.io/install.sh | sh
+```
+
+This installs the CLI globally for the current user through `uv`, making it available across repositories without `sudo`. It also installs or refreshes personal Bevor skill copies. Installing the skill first does not install the CLI by itself.
+
+After installation, rerun the PATH block above in the current shell, then verify:
+
+```bash
+command -v bevor && bevor --version
+```
+
+Continue only after verification succeeds. If installation or verification fails, report the error instead of repeating installation or trying authentication. If an update is requested or the installed version differs, use `bevor upgrade` and read matching help once. Avoid an upgrade, full command-tree discovery, or login on each audit.
+
+Once the CLI is available, check the account:
+
+```bash
 bevor whoami --json
 ```
-
-The tested release is [bevor-cli 0.2.1](https://pypi.org/project/bevor-cli/), requiring Python 3.13+. If missing, use the [official installer](https://bevor.io/install.sh). If an update is requested or the installed version differs, use `bevor upgrade` and read matching help once. Avoid an upgrade, full command-tree discovery, or login on each audit.
 
 Run `bevor login` only when authentication fails. Browser authorization may require the user. Do not display credentials, login responses containing tokens, or credential files. A valid session does not need another login. If authentication fails, pause remote operations while continuing authorized local preparation.
 

@@ -7,10 +7,10 @@ Reviewed against app source b2525415 on 2026-11-14. Use the Dashboard for findin
 Confirm workspace, project, analysis owner, analysis ID, and selected version. A deep link must set workspace/project context:
 
 ```text
-APP_URL/project/users/USER_ID/analyses/ANALYSIS_ID?workspace=WORKSPACE_ID&project=PROJECT_ID
+https://app.bevor.io/project/users/USER_ID/analyses/ANALYSIS_ID?workspace=WORKSPACE_ID&project=PROJECT_ID
 ```
 
-Add `&version=VERSION_ID` to preserve historical context. Use `https://staging.app.bevor.io` for APP_URL when the API is staging. The owner ID belongs to the analysis user, not necessarily the currently authenticated user. Prefer a copied Dashboard URL when available.
+Add `&version=VERSION_ID` to preserve historical context. Public workflows pair this Dashboard with `https://api.bevor.io`. The owner ID belongs to the analysis user, not necessarily the currently authenticated user. Prefer a copied Dashboard URL when available.
 
 ## Review
 

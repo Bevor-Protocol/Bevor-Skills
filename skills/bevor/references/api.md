@@ -6,7 +6,7 @@ Use the current [API reference](https://www.bevor.io/docs/api-reference) and the
 
 ## Authentication and scope
 
-Use bearer authentication from a protected secret store. Keep credentials out of browser clients, source, logs, prompts, and command arguments. Production defaults to `https://api.bevor.io`; staging is `https://staging.api.bevor.io`.
+Use bearer authentication from a protected secret store. Keep credentials out of browser clients, source, logs, prompts, and command arguments. Public integrations use the production API at `https://api.bevor.io` and Dashboard at `https://app.bevor.io`.
 
 Workspace/project navigation can require a user session, while API keys are project-scoped. Do not assume these credential types are interchangeable.
 

@@ -10,7 +10,10 @@ Give your coding agent the code graph, findings, and review history behind your 
 
 Bevor connects security work to exact source versions. This skill helps agents navigate semantic code graphs, reuse earlier findings, review changes, and save results with their evidence and analysis history.
 
-**Compatible clients:** Codex · Claude Code · Cursor · GitHub Copilot · Gemini CLI. Each can load the shared [Agent Skills format](https://agentskills.io).
+**Supported AI platforms:**
+[![Claude Code](assets/badges/claude-code.svg)](https://code.claude.com/) [![Cursor](assets/badges/cursor.svg)](https://cursor.com) [![Codex](assets/badges/codex.svg)](https://openai.com/codex/) [![GitHub Copilot](assets/badges/github-copilot.svg)](https://github.com/features/copilot) [![Gemini CLI](assets/badges/gemini-cli.svg)](https://geminicli.com/)
+
+These clients can load the shared [Agent Skills format](https://agentskills.io).
 
 ## Supported smart contract languages
 
@@ -55,7 +58,7 @@ The skill can also activate automatically for compatible security tasks. Explici
 
 ### Install from your terminal
 
-**CLI and skill on macOS/Linux:** the official installer installs or updates the CLI and copies the skill into personal skill directories for the compatible clients listed above.
+**CLI and skill on macOS/Linux:** the official installer installs or updates the CLI globally for your user through `uv`, without `sudo`, and copies the skill into personal skill directories for the compatible clients listed above.
 
 ```bash
 curl -LsSf https://bevor.io/install.sh | sh
@@ -79,11 +82,11 @@ Restart your coding agent after installation. For a manual install, copy the com
 
 Remote operations need an authenticated Bevor account. Open the [dashboard](https://app.bevor.io), or [join the waitlist](https://www.bevor.io/waitlist) if you need access.
 
-For staging, set both URLs **before** authentication or other remote calls:
+Public workflows use the production API and dashboard. Set both URLs before authentication or other remote calls:
 
 ```bash
-export BEVOR_API_URL=https://staging.api.bevor.io
-export BEVOR_APP_URL=https://staging.app.bevor.io
+export BEVOR_API_URL=https://api.bevor.io
+export BEVOR_APP_URL=https://app.bevor.io
 ```
 
 Check your CLI and account:

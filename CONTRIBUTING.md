@@ -116,7 +116,7 @@ Exact command paths, flags, choices, and defaults come from the installed CLI's 
    ```
 
 3. Review the generated diff, including the CLI release pin and Typer/Click dependency pins. Update affected recipes and parser examples.
-4. Run the complete local checks. If write behavior or lineage semantics changed, run a small authorized staging reproduction and verify the stored result.
+4. Run the complete local checks. If write behavior or lineage semantics changed, run a small authorized reproduction with an isolated fixture and verify the stored result.
 
 The scheduled drift workflow installs the latest published CLI, compares its contract, and provides an update artifact on failure. It has read-only repository permissions and does not publish documentation automatically. Source main and a published wheel can report the same package version while exposing different behavior; record which artifact was tested.
 
@@ -124,11 +124,11 @@ The vendored exporter is `scripts/cli_contract.py` inside the skill. It was deve
 
 ## Testing remote workflows
 
-Use an isolated fixture and the intended environment. Configure staging before any authenticated calls:
+Use an isolated fixture and an explicitly authorized workspace/project. Public workflows use the production API and dashboard:
 
 ```bash
-export BEVOR_API_URL=https://staging.api.bevor.io
-export BEVOR_APP_URL=https://staging.app.bevor.io
+export BEVOR_API_URL=https://api.bevor.io
+export BEVOR_APP_URL=https://app.bevor.io
 ```
 
 Keep upload, finding writes, lineage changes, and paid pipeline runs within the task's authorized scope. Finding writes in CLI 0.2.1 apply immediately, so review the local batch before importing. A syntax check cannot replace verification of the resulting remote state.
@@ -146,7 +146,7 @@ Skill revision or installation date:
 Coding agent and version:
 Model and reasoning effort, if known:
 CLI and SDK versions:
-OS and environment (production, staging, or offline):
+OS and execution context (CLI, CI, or offline):
 Prompt or command:
 Expected behavior:
 Observed behavior and redacted output:
