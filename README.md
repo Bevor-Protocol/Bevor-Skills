@@ -1,3 +1,5 @@
+[![Bevor — Harness your smart contract security](https://bevor.io/images/og.png)](https://bevor.io)
+
 # Bevor Skills
 
 Give your coding agent the code graph, findings, and review history behind your next security decision.
@@ -6,7 +8,7 @@ Give your coding agent the code graph, findings, and review history behind your 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Agent Skills](https://img.shields.io/badge/Agent_Skills-compatible-5865F2)](https://agentskills.io)
 
-[Website](https://bevor.io) · [Docs](https://bevor.io/docs) · [Dashboard](https://app.bevor.io) · [Join the waitlist](https://www.bevor.io/waitlist) · [X](https://x.com/Bevor_io) · [LinkedIn](https://www.linkedin.com/company/bevor/)
+[![Website](assets/badges/link-website.svg)](https://bevor.io) [![Docs](assets/badges/link-docs.svg)](https://bevor.io/docs) [![Dashboard](assets/badges/link-dashboard.svg)](https://app.bevor.io) [![Join the waitlist](assets/badges/link-waitlist.svg)](https://www.bevor.io/waitlist) [![X](assets/badges/link-x.svg)](https://x.com/Bevor_io) [![LinkedIn](assets/badges/link-linkedin.svg)](https://www.linkedin.com/company/bevor/)
 
 Bevor connects security work to exact source versions. This skill helps agents navigate semantic code graphs, reuse earlier findings, review changes, and save results with their evidence and analysis history.
 
