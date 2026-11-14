@@ -1,4 +1,4 @@
-# Bevor Agent Skill
+# Bevor Skills
 
 Give your coding agent the code graph, findings, and review history behind your next security decision.
 
