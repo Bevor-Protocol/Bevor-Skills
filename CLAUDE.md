@@ -8,7 +8,7 @@ This repository publishes the broad Bevor Agent Skill.
 
 ```text
 skills/bevor/          # Entry: SKILL.md; focused guidance under references/
-tests/                 # Selection and behavior fixtures plus static tests
+tests/                 # Selection cases plus static tests
 ```
 
 ## Rules
@@ -17,9 +17,10 @@ tests/                 # Selection and behavior fixtures plus static tests
 - Keep non-security graph selection limited to available graph semantics for the target language; preserve experimental support labels.
 - Put shared routing and safety rules in `SKILL.md`.
 - Put detailed mode guidance in focused references.
-- Use released CLI, SDK, API, and application source for exact behavior.
-- Give each generated reference a version or review date.
+- The skill works through the `bevor` CLI only. Don't point agents at the SDK or API.
+- Don't copy command trees, flags, or version numbers into the skill; agents read `bevor --help`. Check examples against the CLI's current behavior.
 - Do not fabricate commands, endpoints, product support, savings, or examples.
 - Do not include secrets, API keys, personal data, or blanket remote approval.
-- Preserve review before remote finding writes. On CLI 0.2.1, review the local batch before import because writes apply immediately and no separate commit command exists.
-- Run the skill tests and CLI contract check after relevant changes.
+- Every finding write names the tool that produced it (`--tool`).
+- Preserve review before remote finding writes: writes apply as soon as they run.
+- Run the skill tests after relevant changes.

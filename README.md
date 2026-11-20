@@ -77,18 +77,11 @@ npx skills add Bevor-Protocol/Bevor-Skills --skill bevor
 npx skills add Bevor-Protocol/Bevor-Skills --skill bevor -g
 ```
 
-Restart your coding agent after installation. For a manual install, copy the complete [`skills/bevor/`](skills/bevor/) directory into your client's skill directory, preserving its references and scripts. See the skills CLI's [client directory reference](https://github.com/vercel-labs/skills/blob/main/docs/agents.md).
+Restart your coding agent after installation. For a manual install, copy the complete [`skills/bevor/`](skills/bevor/) directory into your client's skill directory, preserving its references. See the skills CLI's [client directory reference](https://github.com/vercel-labs/skills/blob/main/docs/agents.md).
 
 ### Connect your account
 
 Remote operations need an authenticated Bevor account. Open the [dashboard](https://app.bevor.io), or [join the waitlist](https://www.bevor.io/waitlist) if you need access.
-
-Public workflows use the production API and dashboard. Set both URLs before authentication or other remote calls:
-
-```bash
-export BEVOR_API_URL=https://api.bevor.io
-export BEVOR_APP_URL=https://app.bevor.io
-```
 
 Check your CLI and account:
 
@@ -97,7 +90,7 @@ bevor --version
 bevor whoami --json
 ```
 
-If authentication is missing or expired, run `bevor login` and complete browser authorization. Then run `bevor status --json` from the target repository. The skill's [setup guide](skills/bevor/references/cli-workflows.md) covers selecting a workspace, linking a project, matching source, and creating an analysis.
+If authentication is missing or expired, run `bevor login` and complete browser authorization. Then run `bevor status --json` from the target repository.
 
 ### Keep the CLI and skill current
 
@@ -118,9 +111,8 @@ npx skills update bevor
 | --- | --- |
 | Security review | Establish exact code identity, inspect relevant execution paths, and attach findings to semantic locations. |
 | Review across versions | Create child analysis versions, inspect carryover, and check what needs another review. |
-| Findings exchange | Deduplicate and batch new findings through YAML, Bevor JSON, or external-tool SARIF. |
+| Findings | Deduplicate and batch new findings through YAML, Bevor JSON, or analyzer SARIF, attributed to the tool that found them. |
 | Graph investigation | Follow calls, state access, inheritance, and related code to investigate a security question. |
-| Tooling and CI | Use the CLI, Python SDK, or API while preserving existing tools, run identity, and security gates. |
 | Team review | Keep findings, evidence, and analysis history available in the Bevor dashboard. |
 
 The entry point is [`bevor`](skills/bevor/SKILL.md). It loads the focused references needed for each task.
@@ -142,25 +134,23 @@ Use the Bevor graph to investigate which entrypoints can reach this state write.
 3. **Review inherited findings.** Carryover informs the next review. An automatic remediation label still needs verification against the changed code.
 4. **Save a reviewed batch.** Preserve finding identity, avoid duplicates, and read back accepted results before reporting completion.
 
-CLI 0.2.1 finding writes apply immediately. Bulk import creates findings; existing records require edits. Prefer YAML or Bevor JSON when preserving recommendations and PoCs matters, because the tested SARIF converter drops those fields. See [finding exchange](skills/bevor/references/findings-exchange.md).
+Finding writes apply as soon as they run, so the skill reviews the batch first. Every write names the tool that produced it. See [findings](skills/bevor/references/findings.md).
 
 Code upload and analysis creation are separate from running Bevor's paid security pipeline. The skill follows the user's requested scope for remote operations and reports measured reuse without inventing token, time, or cost savings.
 
-## Compatibility and reference
-
-The reviewed CLI/SDK contract is **0.2.1**, with Python **3.13+**. The [release pin](tests/fixtures/cli-release.txt) records the package used by validation; it is not a claim that this is the newest release. See [supported smart contract languages](#supported-smart-contract-languages) for language availability. Graph operations and coverage can vary by target, particularly for experimental Soroban support.
+## Reference
 
 | Reference | Use it for |
 | --- | --- |
-| [CLI workflows](skills/bevor/references/cli-workflows.md) | Setup, source selection, child versions, and recovery. |
-| [Graph navigation](skills/bevor/references/graph-navigation.md) | Queries, relations, and released-command workarounds. |
-| [Finding exchange](skills/bevor/references/findings-exchange.md) | Bulk payloads, SARIF limitations, and duplicate control. |
-| [Generated CLI command tree](skills/bevor/references/cli-command-tree.md) | Released commands and options. |
-| [Public documentation](https://bevor.io/docs) | Product, CLI, SDK, and API documentation. |
+| [Graph navigation](skills/bevor/references/graph-navigation.md) | Scoping a review with calls, state, guards, and change impact. |
+| [New commits](skills/bevor/references/new-commits.md) | Continuing an analysis after the code changes. |
+| [Findings](skills/bevor/references/findings.md) | What to report, the import format, tool attribution, and duplicates. |
+
+The skill works through the `bevor` CLI. `bevor --help` and `bevor <command> --help` give exact commands and flags. Graph operations and coverage can vary by language, particularly for experimental Soroban support.
 
 ## Contributing
 
-Help improve real workflows: clearer instructions, reproducible bug fixes, better examples, and checks that catch CLI drift. Start with [CONTRIBUTING.md](CONTRIBUTING.md) for the repository map, local validation, pull request process, and bug-report details.
+Help improve real workflows: clearer instructions, reproducible bug fixes, and better examples. Start with [CONTRIBUTING.md](CONTRIBUTING.md) for the repository map, local validation, pull request process, and bug-report details.
 
 For sensitive security issues, follow the [private reporting guidance](CONTRIBUTING.md#security-reports). Keep private source and credentials out of public issues.
 

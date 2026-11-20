@@ -23,7 +23,7 @@
   {"prompt": "Upload the Slither SARIF before the security gate fails the job.", "expected": true, "class": "ci"},
   {"prompt": "Which tools produced unique findings with validated proofs of concept?", "expected": true, "class": "attribution"},
   {"prompt": "Run cheap static checks before the heavyweight security agents.", "expected": true, "class": "orchestration"},
-  {"prompt": "Use the Python client to traverse Bevor call edges asynchronously.", "expected": true, "class": "sdk"},
+  {"prompt": "Use the Python client to traverse Bevor call edges asynchronously.", "expected": false, "class": "sdk"},
   {"prompt": "Build a React dependency graph.", "expected": false, "class": "general-development"},
   {"prompt": "Explain reentrancy.", "expected": false, "class": "general-explanation"},
   {"prompt": "Add a normal transfer instruction to this Anchor program.", "expected": false, "class": "feature-work"},

@@ -1,3 +1,0 @@
-# Metadata renderer versions used for this contract.
-typer==0.28.0
-click==8.5.1

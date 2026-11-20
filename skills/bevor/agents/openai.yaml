@@ -1,6 +1,6 @@
 interface:
   display_name: "Bevor"
-  short_description: "Graph-aware security work with Bevor"
-  default_prompt: "Use $bevor to reuse security context and complete this task."
+  short_description: "Graph-aware security review with the Bevor CLI"
+  default_prompt: "Use $bevor to audit this code and record the findings."
 policy:
   allow_implicit_invocation: true

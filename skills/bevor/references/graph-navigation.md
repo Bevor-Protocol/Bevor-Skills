@@ -1,95 +1,41 @@
 # Graph navigation
 
-Use this reference for graph queries, change impact, call paths, stable locations, and graph-backed tools.
+Bevor parses the whole codebase into a graph: every function, modifier, state variable, and contract, and how they relate. The `bevor graph` commands query HEAD's code. Edges come from parsing, not name matching, so a query is complete (it covers files you haven't opened), exact (overloads and inheritance resolve correctly), and repeatable. Querying it first means you only read source for the nodes that matter.
 
-Language support updated 2026-11-14. Command examples remain reviewed against released CLI 0.2.1.
+## Questions to ask it
 
-## Current domain boundary
+`graph nodes` and `graph edges` show 10 results by default; pass `--limit 0` when you need all of them.
 
-Bevor supports Solidity, Anchor Rust, and GenLayer Intelligent Python Contracts. Soroban Rust support is experimental.
-
-Check the selected code record's language/framework and available node types, relations, and SDK helpers before choosing queries. Support does not imply identical graph coverage across languages. Use the operations available for the target, preserve the experimental label for Soroban, and state any missing coverage relevant to the task.
-
-Finding import and graph capabilities are separate: successful SARIF or generic finding ingestion alone does not establish that a particular graph operation is available.
-
-## Start narrow
-
-1. Run `bevor status --json` and record the exact code ID.
-2. Find a node with a narrow query:
-
-```bash
-bevor codes nodes list --name NAME --json
-bevor codes nodes list --file FILE_ID --node-type TYPE --json
-bevor codes nodes list --entrypoints --no-deps --json
-```
-
-3. Use node view for metadata. The file filter takes a Bevor file ID, not a source path.
-4. Use `node content` only for the necessary source segment.
-5. Follow one relation type and direction at a time.
-6. Use `call-chain` for callable behavior.
-7. Query findings for the node before calling the area new work.
-8. Stop when more nodes no longer affect the question or attack path.
-
-Do not load the whole graph into model context. Use the SDK for repeated traversal and keep raw data in memory or a file.
-
-CLI 0.2.1 has a known direction-option enum mismatch and JSON serialization defects on node view and call-chain. Avoid repeated failing calls: omit the direction filter, filter returned edges locally, or use matching SDK methods. Read text output when JSON fails. Verify source/destination IDs when applying local direction filters.
-
-## Edge meanings
-
-| Edge | Security use |
+| Question | Query |
 | --- | --- |
-| `calls` | Internal callable flow. Follow out for callees and in for callers. |
-| `calls_external` | External-call boundary and integration risk. |
-| `reads` | State or value that can influence behavior. |
-| `writes` | State that the node can change. |
-| `inherits`, `overrides` | Effective behavior across contract hierarchy. |
-| `modified_by` | Modifier or guard attached to callable behavior. |
-| `has_access_control` | Access restriction represented by the graph. |
+| What can an outside caller reach? | `bevor graph nodes --entrypoint --no-deps --limit 0 --json` |
+| Where is a function or variable? | `bevor graph nodes --name NAME --json` |
+| What does this node look like? | `bevor graph show NODE_ID --source --json` |
+| What does this function call? | `bevor graph edges --node NODE_ID --type calls --direction out --json` |
+| Who calls it? | `bevor graph edges --node NODE_ID --type calls --direction in --json` |
+| What state does it change? | `bevor graph edges --node NODE_ID --type writes --direction out --json` |
+| What else writes this variable? | `bevor graph edges --node VARIABLE_ID --type writes --direction in --json` |
+| Which guards protect it? | `bevor graph edges --node NODE_ID --type modified_by --json` |
+| Where does it call other contracts? | `bevor graph edges --node NODE_ID --type calls_external --json` |
+
+If you've already run `bevor analyses coverage --json`, it lists the same entrypoints with their coverage; `graph nodes --entrypoint` is for filtering them, by `--file` or `--name`, or for when you have no analysis selected. `--no-deps` leaves out dependency code. Follow one relation at a time, and stop when further nodes can't change the asset, invariant, or attack path you're examining. Don't dump the whole graph into context.
+
+`bevor graph call-chain NODE_ID --json` is also available: the pre-computed execution path from a function through everything it calls, annotated with the state each step reads and writes, resolved to the storage it actually touches. It's the function's full execution context as one retrievable result, instead of context you'd rebuild by recursively following calls and searching source.
+
+## Relations
+
+| Relation | Meaning |
+| --- | --- |
+| `calls` | Internal call flow. |
+| `calls_external` | Calls to other contracts: external-call boundaries and callback surfaces. |
+| `reads`, `writes` | State the node reads or changes. |
+| `inherits`, `overrides` | Effective behavior across the contract hierarchy. |
+| `modified_by` | Modifiers and guards. |
 | `has_constraint`, `has_condition` | Preconditions and control conditions. |
-| `emits`, `throws` | Observable events and error paths. |
-| `defines`, `initializes`, `instantiates` | Ownership and construction relations. |
-| `uses`, `typed_as`, `accesses` | Data, type, and member dependencies. |
-| `implements`, `extends` | Interface and type-extension relationships. |
-| `references`, `has_ref_comment` | Source reference and inherited documentation links. |
+| `emits`, `throws` | Events and error paths. |
 
-An edge is a structural fact. Its presence or absence is not a security verdict.
+`bevor graph edges --help` lists the rest.
 
-## Change-impact procedure
+## When to read source directly
 
-For each changed semantic node:
-
-1. Record direct callers and callees.
-2. Record state read and written by the node.
-3. Find other nodes that read or write the same state.
-4. Include modifiers, access controls, constraints, and conditions.
-5. Include inheritance and overrides.
-6. Mark external calls, emitted events, and error paths.
-7. Follow transitive relations only while they can change an asset, invariant, authorization rule, or attack path.
-8. Compare the selected code versions through SDK transitions when line changes are insufficient.
-
-Report the affected scope with the relation path that caused inclusion. Do not report every reachable node.
-
-## Source search fallback
-
-Use targeted source search for:
-
-- Exact identifiers and constants.
-- Configuration or off-chain code that the graph does not cover.
-- Confirmation of source evidence.
-- Edits after the graph has selected scope.
-
-Use broad source search only when the graph is unavailable, stale, incomplete, or unsupported. State the limitation.
-
-## SDK graph selection
-
-Use `Graph` or `AsyncGraph` for:
-
-- Repeated or transitive traversal.
-- Offline snapshots.
-- Source reconstruction.
-- Descendant and Merkle matching.
-- Distance or call-chain queries.
-- Code transitions across versions.
-- Stable semantic locations for findings.
-
-Do not build the full SDK graph for a one-file syntax check.
+To confirm what a node does, for exact identifiers and constants, and for code the graph doesn't cover (configuration, off-chain code). Fall back to broad search only when the graph doesn't cover the target, and say so.
