@@ -143,8 +143,7 @@ Code upload and analysis creation are separate from running Bevor's paid securit
 | Reference | Use it for |
 | --- | --- |
 | [Graph navigation](skills/bevor/references/graph-navigation.md) | Scoping a review with calls, state, guards, and change impact. |
-| [New commits](skills/bevor/references/new-commits.md) | Continuing an analysis after the code changes. |
-| [Findings](skills/bevor/references/findings.md) | What to report, the import format, tool attribution, and duplicates. |
+| [Findings](skills/bevor/references/findings.md) | What to report, the file formats, where findings land, and duplicates. |
 
 The skill works through the `bevor` CLI. `bevor --help` and `bevor <command> --help` give exact commands and flags. Graph operations and coverage can vary by language, particularly for experimental Soroban support.
 

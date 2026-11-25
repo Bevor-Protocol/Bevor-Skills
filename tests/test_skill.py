@@ -48,7 +48,7 @@ class SkillStructureTests(unittest.TestCase):
 
     def test_references(self) -> None:
         actual = {path.name for path in (SKILL / "references").glob("*.md")}
-        self.assertEqual({"graph-navigation.md", "new-commits.md", "findings.md"}, actual)
+        self.assertEqual({"graph-navigation.md", "findings.md"}, actual)
 
     def test_relative_markdown_links_resolve(self) -> None:
         for path in DOCS:
@@ -80,8 +80,8 @@ class ScopeTests(unittest.TestCase):
 
     def test_finding_writes_name_their_tool(self) -> None:
         for path in DOCS:
-            for command in re.findall(r"bevor findings (?:import|add)\b[^`\n]*", path.read_text()):
-                if " --help" in command or command.rstrip().endswith(("add", "import")):
+            for command in re.findall(r"bevor findings add\b[^`\n]*", path.read_text()):
+                if " --help" in command or command.rstrip().endswith("add"):
                     continue
                 if "results.sarif" in command:  # SARIF carries its producer's name.
                     continue

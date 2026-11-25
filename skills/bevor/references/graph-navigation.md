@@ -6,21 +6,29 @@ Bevor parses the whole codebase into a graph: every function, modifier, state va
 
 `graph nodes` and `graph edges` show 10 results by default; pass `--limit 0` when you need all of them.
 
+Wherever a command takes a `NODE`, pass whichever you have:
+
+- a node id or short id;
+- a name: `withdraw`, `Vault.withdraw`, or `Vault::withdraw(uint256)`, optionally after a file to narrow it: `src/Vault.sol:withdraw`;
+- a file and line: `src/Vault.sol:42`, `src/Vault.sol:42:5`, `src/Vault.sol:42-50`, or `src/Vault.sol#L42-L50`.
+
+A file and line picks the smallest node containing it, which can be a statement inside a function. A name is searched like a symbol: the last part names the node, and any parts before it name the definitions enclosing it. So `Vault.withdraw` is the `withdraw` declared in `Vault`, not one `Vault` inherits; name the base contract for that. A name must match exactly one node. If several match, the error lists them with their short ids; pass one of those instead. If none match, it suggests close names.
+
 | Question | Query |
 | --- | --- |
 | What can an outside caller reach? | `bevor graph nodes --entrypoint --no-deps --limit 0 --json` |
 | Where is a function or variable? | `bevor graph nodes --name NAME --json` |
-| What does this node look like? | `bevor graph show NODE_ID --source --json` |
-| What does this function call? | `bevor graph edges --node NODE_ID --type calls --direction out --json` |
-| Who calls it? | `bevor graph edges --node NODE_ID --type calls --direction in --json` |
-| What state does it change? | `bevor graph edges --node NODE_ID --type writes --direction out --json` |
-| What else writes this variable? | `bevor graph edges --node VARIABLE_ID --type writes --direction in --json` |
-| Which guards protect it? | `bevor graph edges --node NODE_ID --type modified_by --json` |
-| Where does it call other contracts? | `bevor graph edges --node NODE_ID --type calls_external --json` |
+| What does this node look like? | `bevor graph show NODE --source --json` |
+| What does this function call? | `bevor graph edges --node NODE --type calls --direction out --json` |
+| Who calls it? | `bevor graph edges --node NODE --type calls --direction in --json` |
+| What state does it change? | `bevor graph edges --node NODE --type writes --direction out --json` |
+| What else writes this variable? | `bevor graph edges --node VARIABLE --type writes --direction in --json` |
+| Which guards protect it? | `bevor graph edges --node NODE --type modified_by --json` |
+| Where does it call other contracts? | `bevor graph edges --node NODE --type calls_external --json` |
 
 If you've already run `bevor analyses coverage --json`, it lists the same entrypoints with their coverage; `graph nodes --entrypoint` is for filtering them, by `--file` or `--name`, or for when you have no analysis selected. `--no-deps` leaves out dependency code. Follow one relation at a time, and stop when further nodes can't change the asset, invariant, or attack path you're examining. Don't dump the whole graph into context.
 
-`bevor graph call-chain NODE_ID --json` is also available: the pre-computed execution path from a function through everything it calls, annotated with the state each step reads and writes, resolved to the storage it actually touches. It's the function's full execution context as one retrievable result, instead of context you'd rebuild by recursively following calls and searching source.
+`bevor graph call-chain NODE --json` is also available: the pre-computed execution path from a function through everything it calls, annotated with the state each step reads and writes, resolved to the storage it actually touches. It's the function's full execution context as one retrievable result, instead of context you'd rebuild by recursively following calls and searching source.
 
 ## Relations
 
